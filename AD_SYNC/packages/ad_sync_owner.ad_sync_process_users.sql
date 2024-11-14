@@ -104,7 +104,7 @@ PROCEDURE expire_password (p_start_timestamp timestamp, p_end_timestamp timestam
                             p_process_run);
         FOR i IN (
             SELECT
-                au.id, au.username
+                au.id, au.username,
             FROM
                 ad_sync_owner.ad_sync_users au join all_users u on (au.username=u.username)
             WHERE
@@ -166,7 +166,7 @@ PROCEDURE change_password (p_start_timestamp timestamp, p_end_timestamp timestam
                             p_process_run);
         FOR i IN (
             SELECT
-                au.id, au.username, ad_sync_owner.ad_sync_tools.generate_password as password
+                au.id, au.username, nvl(password,ad_sync_owner.ad_sync_tools.generate_password) as password
             FROM
                 ad_sync_owner.ad_sync_users au join all_users u on (au.username=u.username)
             WHERE
@@ -422,7 +422,7 @@ PROCEDURE unlock_users (p_start_timestamp timestamp, p_end_timestamp timestamp, 
                             p_process_run);
         FOR i IN (
             SELECT
-                au.id, au.username, ad_sync_owner.ad_sync_tools.generate_password as password
+                au.id, au.username, nvl(au.password,ad_sync_owner.ad_sync_tools.generate_password) as password
             FROM
                 ad_sync_owner.ad_sync_users au left join all_users u on (au.username=u.username)
             WHERE
