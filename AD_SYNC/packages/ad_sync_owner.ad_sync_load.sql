@@ -4,7 +4,7 @@ CREATE OR REPLACE PACKAGE ad_sync_owner.ad_sync_load AS
 
 procedure init_load (p_LOAD_TYPE char);
 procedure finish_load;
-procedure add_user_to_load (p_username varchar2, p_password varchar2, p_REQUESTED_OPERATION char default 'C');
+procedure add_user_to_load (p_username varchar2, p_password varchar2 default null, p_REQUESTED_OPERATION char default 'C');
 procedure add_group_to_load (p_groupname varchar2, p_REQUESTED_OPERATION char default 'C');
 procedure add_group_member_to_load (p_groupname varchar2, p_member varchar2, p_REQUESTED_OPERATION char default 'C');
 
@@ -43,9 +43,9 @@ commit;
       RAISE;
 end finish_load;
 
-procedure add_user_to_load (p_username varchar2, p_password varchar2, p_REQUESTED_OPERATION char default 'C') is   
+procedure add_user_to_load (p_username varchar2, p_password varchar2 default null, p_REQUESTED_OPERATION char default 'C') is   
 begin
-INSERT INTO ad_sync_owner.ad_sync_users (username, PASSWORD, REQUESTED_OPERATION) VALUES (upper(p_username), PASSWORD, upper(p_REQUESTED_OPERATION));
+INSERT INTO ad_sync_owner.ad_sync_users (username, PASSWORD, REQUESTED_OPERATION) VALUES (upper(p_username), p_PASSWORD, upper(p_REQUESTED_OPERATION));
 commit;
   EXCEPTION
     WHEN OTHERS THEN

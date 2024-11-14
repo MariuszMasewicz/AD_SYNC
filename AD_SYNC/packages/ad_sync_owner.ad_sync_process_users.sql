@@ -104,7 +104,7 @@ PROCEDURE expire_password (p_start_timestamp timestamp, p_end_timestamp timestam
                             p_process_run);
         FOR i IN (
             SELECT
-                au.id, au.username,
+                au.id, au.username
             FROM
                 ad_sync_owner.ad_sync_users au join all_users u on (au.username=u.username)
             WHERE
@@ -177,7 +177,7 @@ PROCEDURE change_password (p_start_timestamp timestamp, p_end_timestamp timestam
                 )
          LOOP
             v_stmt := 'alter user ' || i.username 
-                   || ' identified by '|| i.password
+                   || ' identified by "'|| i.password||'"'
                    || ' account unlock';
             dbms_output.put_line(v_stmt||';');
             
@@ -434,10 +434,11 @@ PROCEDURE unlock_users (p_start_timestamp timestamp, p_end_timestamp timestamp, 
                 )
          LOOP
             v_stmt := 'create user ' || i.username 
-                   || ' identified by '|| i.password
+                   || ' identified by "'|| i.password||'"'
                    || ' DEFAULT TABLESPACE '||ad_sync_owner.ad_sync_tools.get_param_value('USER_TABLESPACE')
                    || ' TEMPORARY TABLESPACE ' ||ad_sync_owner.ad_sync_tools.get_param_value('USER_TEMP_TABLESPACE')
                    || ' account '||ad_sync_owner.ad_sync_tools.get_param_value('USER_ACCOUNT_LOCK_STATUS')
+                   || ' profile ad_sync_default_profile'
                    --|| ' password expire'
                    ;
             dbms_output.put_line(v_stmt||';');
