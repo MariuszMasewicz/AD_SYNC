@@ -1,0 +1,22 @@
+prompt CREATE TABLE ad_sync_owner.AD_SYNC_GROUPS 
+
+CREATE TABLE ad_sync_owner.AD_SYNC_GROUPS 
+(
+  ID NUMBER DEFAULT ad_sync_owner.AD_SYNC_GROUPS_seq.nextval NOT NULL 
+, GROUPNAME VARCHAR2(1000) NOT NULL 
+, STATUS NUMBER DEFAULT 1 NOT NULL 
+, PROCESS_TIMESTAMP timestamp ,
+  LOAD_ID number,
+	created_timestamp   TIMESTAMP(6) DEFAULT on null systimestamp NOT NULL,
+  created_user        VARCHAR2(255 CHAR) DEFAULT on null user NOT NULL,
+  updated_timestamp   TIMESTAMP(6),
+  updated_user        VARCHAR2(255 CHAR)
+, CONSTRAINT AD_SYNC_GROUPS_PK PRIMARY KEY 
+  (
+    ID 
+  )
+  ENABLE 
+);
+
+ALTER TABLE ad_sync_owner.AD_SYNC_GROUPS ADD CONSTRAINT AD_SYNC_GROUPS_FK1 FOREIGN KEY (STATUS) REFERENCES ad_sync_owner.AD_SYNC_STATUSES (ID) ENABLE;
+

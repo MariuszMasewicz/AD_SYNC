@@ -1,0 +1,14 @@
+prompt CREATE SEQUENCE ad_sync_owner.ad_sync_users_SEQ;
+CREATE SEQUENCE ad_sync_owner.ad_sync_users_SEQ;
+prompt CREATE SEQUENCE ad_sync_owner.AD_SYNC_GROUPS_SEQ;
+CREATE SEQUENCE ad_sync_owner.AD_SYNC_GROUPS_SEQ;
+prompt CREATE SEQUENCE ad_sync_owner.AD_SYNC_GROUP_MEMBERS_SEQ;
+CREATE SEQUENCE ad_sync_owner.AD_SYNC_GROUP_MEMBERS_SEQ;
+prompt CREATE SEQUENCE ad_sync_owner.AD_SYNC_HISTORY_SEQ;
+CREATE SEQUENCE ad_sync_owner.AD_SYNC_HISTORY_SEQ;
+prompt CREATE SEQUENCE ad_sync_owner.AD_SYNC_LOG_TABLE_seq;
+CREATE SEQUENCE ad_sync_owner.AD_SYNC_LOG_TABLE_seq;
+prompt CREATE SEQUENCE ad_sync_owner.AD_SYNC_PROCESS_RUN_seq;
+CREATE SEQUENCE ad_sync_owner.AD_SYNC_PROCESS_RUN_seq;
+prompt CREATE SEQUENCE ad_sync_owner.AD_SYNC_LOAD_seq;
+CREATE SEQUENCE ad_sync_owner.AD_SYNC_LOAD_seq;

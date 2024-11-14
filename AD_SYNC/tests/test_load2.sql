@@ -1,0 +1,25 @@
+-- loads 2 new users
+exec ad_sync_owner.ad_sync_load.init_load(p_LOAD_TYPE => 'R'); 
+exec ad_sync_owner.ad_sync_load.add_user_to_load (p_username => 'ad_test_user1', p_REQUESTED_OPERATION => 'C');
+exec ad_sync_owner.ad_sync_load.add_user_to_load (p_username => 'ad_test_user2', p_REQUESTED_OPERATION => 'C');
+exec ad_sync_owner.ad_sync_load.add_user_to_load (p_username => 'ad_test_user3', p_REQUESTED_OPERATION => 'C');
+exec ad_sync_owner.ad_sync_load.add_user_to_load (p_username => 'ad_test_user4', p_REQUESTED_OPERATION => 'C');
+exec ad_sync_owner.ad_sync_load.add_group_to_load (p_groupname => 'ad_test_group1');
+exec ad_sync_owner.ad_sync_load.add_group_to_load (p_groupname => 'ad_test_group2');
+exec ad_sync_owner.ad_sync_load.add_group_to_load (p_groupname => 'ad_test_group3');
+exec ad_sync_owner.ad_sync_load.add_group_to_load (p_groupname => 'ad_test_group4');
+exec ad_sync_owner.ad_sync_load.add_group_member_to_load (p_groupname => 'ad_test_group1', p_member => 'ad_test_user1');
+exec ad_sync_owner.ad_sync_load.add_group_member_to_load (p_groupname => 'ad_test_group1', p_member => 'ad_test_user2');
+exec ad_sync_owner.ad_sync_load.add_group_member_to_load (p_groupname => 'ad_test_group1', p_member => 'ad_test_user1');
+exec ad_sync_owner.ad_sync_load.add_group_member_to_load (p_groupname => 'ad_test_group1', p_member => 'ad_test_user2');
+exec ad_sync_owner.ad_sync_load.add_group_member_to_load (p_groupname => 'ad_test_group3', p_member => 'ad_test_user1');
+exec ad_sync_owner.ad_sync_load.add_group_member_to_load (p_groupname => 'ad_test_group3', p_member => 'ad_test_group1');
+exec ad_sync_owner.ad_sync_load.add_group_member_to_load (p_groupname => 'ad_test_group3', p_member => 'ad_test_group2');
+exec ad_sync_owner.ad_sync_load.add_group_member_to_load (p_groupname => 'ad_test_group4', p_member => 'ad_test_user2');
+exec ad_sync_owner.ad_sync_load.add_user_to_load (p_username => 'ad_test_user1', p_REQUESTED_OPERATION => 'L');
+exec ad_sync_owner.ad_sync_load.add_user_to_load (p_username => 'ad_test_user1', p_REQUESTED_OPERATION => 'U');
+exec ad_sync_owner.ad_sync_load.add_user_to_load (p_username => 'ad_test_user2', p_REQUESTED_OPERATION => 'L');
+exec ad_sync_owner.ad_sync_load.add_user_to_load (p_username => 'ad_test_user2', p_REQUESTED_OPERATION => 'P');
+exec ad_sync_owner.ad_sync_load.add_user_to_load (p_username => 'ad_test_user2', p_REQUESTED_OPERATION => 'E');
+exec ad_sync_owner.ad_sync_load.add_user_to_load (p_username => 'ad_test_user3', p_REQUESTED_OPERATION => 'D');
+exec ad_sync_owner.ad_sync_load.finish_load;
