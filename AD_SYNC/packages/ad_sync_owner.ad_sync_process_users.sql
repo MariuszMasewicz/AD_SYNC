@@ -166,7 +166,7 @@ PROCEDURE change_password (p_start_timestamp timestamp, p_end_timestamp timestam
                             p_process_run);
         FOR i IN (
             SELECT
-                au.id, au.username, nvl(password,ad_sync_owner.ad_sync_tools.generate_password) as password
+                au.id, au.username, nvl(au.password,ad_sync_owner.ad_sync_tools.generate_password) as password
             FROM
                 ad_sync_owner.ad_sync_users au join ad_sync_owner.AD_SYNC_MANAGED_USERS u on (au.username=u.username)
             WHERE

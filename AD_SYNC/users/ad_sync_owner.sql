@@ -12,6 +12,7 @@ ALTER USER ad_sync_owner QUOTA UNLIMITED ON &ad_sync_owner_tablespace.;
 GRANT CREATE SESSION TO ad_sync_owner ;
 GRANT CREATE TABLE TO ad_sync_owner ;
 GRANT CREATE PROCEDURE TO ad_sync_owner ;
+GRANT CREATE VIEW TO ad_sync_owner ;
 GRANT CREATE SEQUENCE TO ad_sync_owner ;
 GRANT INHERIT PRIVILEGES ON USER SYS TO ad_sync_owner;
 

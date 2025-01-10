@@ -1,11 +1,11 @@
 prompt CREATE OR REPLACE PACKAGE  ad_sync_owner.ad_sync_process_group_members
 
-CREATE OR REPLACE PACKAGE  ad_sync_owner.ad_sync_process_group_members AUTHID current_GROUP AS
+CREATE OR REPLACE PACKAGE  ad_sync_owner.ad_sync_process_group_members AUTHID current_user AS
     PROCEDURE add_group_members (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
     PROCEDURE drop_gropus_not_exist_in_load (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
     PROCEDURE drop_gropus_on_demand (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
     PROCEDURE mark_existing_group_members (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
- ND ad_sync_process_group_members;
+END ad_sync_process_group_members;
 /
 
 prompt CREATE OR REPLACE PACKAGE BODY ad_sync_owner.ad_sync_process_group_members
@@ -22,7 +22,7 @@ PROCEDURE drop_gropus_not_exist_in_load (p_start_timestamp timestamp, p_end_time
                             p_process_run);
         FOR i IN (
             SELECT
-                g.GROUPname
+                ag.id, ag.GROUPname
             FROM
                 ad_sync_owner.ad_sync_group_members ag right join ad_sync_owner.AD_SYNC_MANAGED_group_members g on (ag.GROUPname=g.GROUPname)
             WHERE
@@ -139,7 +139,7 @@ PROCEDURE drop_gropus_on_demand (p_start_timestamp timestamp, p_end_timestamp ti
                 , PROCESS_TIMESTAMP = current_timestamp
                 , load_id=p_load_id
             WHERE
-                gropuname in (select groupname from ad_sync_owner.AD_SYNC_MANAGED_group_members)
+                groupname in (select groupname from ad_sync_owner.AD_SYNC_MANAGED_group_members)
                 and status = 1
                 and REQUESTED_OPERATION = 'C' --requested create GROUP
                 and groupname like ad_sync_owner.ad_sync_tools.get_param_value('GROUPNAME_PREFIX')||'%'
@@ -193,9 +193,9 @@ PROCEDURE drop_gropus_on_demand (p_start_timestamp timestamp, p_end_timestamp ti
             SELECT
                 ag.id, ag.groupname
             FROM
-                ad_sync_owner.ad_sync_group_members ag left join ad_sync_owner.AD_SYNC_MANAGED_group_members g on (au.groupname=u.groupname)
+                ad_sync_owner.ad_sync_group_members ag left join ad_sync_owner.AD_SYNC_MANAGED_group_members g on (ag.groupname=g.groupname)
             WHERE
-                gu.status = 1
+                ag.status = 1
                 and ag.REQUESTED_OPERATION = 'C' --requested create GROUP
                 and ag.groupname like ad_sync_owner.ad_sync_tools.get_param_value('GROUPNAME_PREFIX')||'%'
                 and ag.CREATED_TIMESTAMP between p_start_timestamp and p_end_timestamp
