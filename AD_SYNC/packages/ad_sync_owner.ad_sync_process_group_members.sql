@@ -1,15 +1,15 @@
-prompt CREATE OR REPLACE PACKAGE  ad_sync_owner.ad_sync_process_groups
+prompt CREATE OR REPLACE PACKAGE  ad_sync_owner.ad_sync_process_group_members
 
-CREATE OR REPLACE PACKAGE  ad_sync_owner.ad_sync_process_groups AUTHID current_GROUP AS
-    PROCEDURE add_groups (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
+CREATE OR REPLACE PACKAGE  ad_sync_owner.ad_sync_process_group_members AUTHID current_GROUP AS
+    PROCEDURE add_group_members (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
     PROCEDURE drop_gropus_not_exist_in_load (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
     PROCEDURE drop_gropus_on_demand (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
-    PROCEDURE mark_existing_groups (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
- ND ad_sync_process_groups;
+    PROCEDURE mark_existing_group_members (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
+ ND ad_sync_process_group_members;
 /
 
-prompt CREATE OR REPLACE PACKAGE BODY ad_sync_owner.ad_sync_process_groups
-CREATE OR REPLACE PACKAGE BODY ad_sync_owner.ad_sync_process_groups AS
+prompt CREATE OR REPLACE PACKAGE BODY ad_sync_owner.ad_sync_process_group_members
+CREATE OR REPLACE PACKAGE BODY ad_sync_owner.ad_sync_process_group_members AS
 
 PROCEDURE drop_gropus_not_exist_in_load (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number) as
         v_stmt VARCHAR2(4000);
@@ -24,7 +24,7 @@ PROCEDURE drop_gropus_not_exist_in_load (p_start_timestamp timestamp, p_end_time
             SELECT
                 g.GROUPname
             FROM
-                ad_sync_owner.ad_sync_GROUPs ag right join ad_sync_owner.AD_SYNC_MANAGED_GROUPS g on (ag.GROUPname=g.GROUPname)
+                ad_sync_owner.ad_sync_group_members ag right join ad_sync_owner.AD_SYNC_MANAGED_group_members g on (ag.GROUPname=g.GROUPname)
             WHERE
                 ag.status = 1
                 --and ag.REQUESTED_OPERATION = 'D' --requested drop GROUP
@@ -77,7 +77,7 @@ PROCEDURE drop_gropus_on_demand (p_start_timestamp timestamp, p_end_timestamp ti
             SELECT
                 ag.id, au.GROUPname
             FROM
-                ad_sync_owner.ad_sync_GROUPs ag join ad_sync_owner.AD_SYNC_MANAGED_GROUPS g on (ag.GROUPname=g.GROUPname)
+                ad_sync_owner.ad_sync_group_members ag join ad_sync_owner.AD_SYNC_MANAGED_group_members g on (ag.GROUPname=g.GROUPname)
             WHERE
                 ag.status = 1
                 and ag.REQUESTED_OPERATION = 'D' --requested drop GROUP
@@ -96,7 +96,7 @@ PROCEDURE drop_gropus_on_demand (p_start_timestamp timestamp, p_end_timestamp ti
                             SQLERRM,
                             p_process_run);
             execute immediate v_stmt;
-            UPDATE ad_sync_owner.ad_sync_GROUPs
+            UPDATE ad_sync_owner.ad_sync_group_members
             SET
                 status = 32 -- GROUP dropped
                 , PROCESS_TIMESTAMP = current_timestamp
@@ -123,23 +123,23 @@ PROCEDURE drop_gropus_on_demand (p_start_timestamp timestamp, p_end_timestamp ti
     
     END drop_gropus_on_demand;
   
-    PROCEDURE mark_existing_groups (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number) is
+    PROCEDURE mark_existing_group_members (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number) is
     v_number_of_existing pls_integer;
     begin
       if p_process_run is not null then
       ad_sync_log.write_info($$PLSQL_UNIT || 
-                            '->mark_existing_groups started for: '||p_start_timestamp||' and '||p_end_timestamp,
+                            '->mark_existing_group_members started for: '||p_start_timestamp||' and '||p_end_timestamp,
                             SQLCODE,
                             SQLERRM,
                             p_process_run);
-      /* existing GROUPs*/
-      UPDATE ad_sync_owner.AD_SYNC_GROUPS
+      /* existing group_members*/
+      UPDATE ad_sync_owner.AD_SYNC_group_members
             SET
                 status = 38 -- GROUP exists in database
                 , PROCESS_TIMESTAMP = current_timestamp
                 , load_id=p_load_id
             WHERE
-                gropuname in (select groupname from ad_sync_owner.AD_SYNC_MANAGED_GROUPS)
+                gropuname in (select groupname from ad_sync_owner.AD_SYNC_MANAGED_group_members)
                 and status = 1
                 and REQUESTED_OPERATION = 'C' --requested create GROUP
                 and groupname like ad_sync_owner.ad_sync_tools.get_param_value('GROUPNAME_PREFIX')||'%'
@@ -147,12 +147,12 @@ PROCEDURE drop_gropus_on_demand (p_start_timestamp timestamp, p_end_timestamp ti
             v_number_of_existing := SQL%ROWCOUNT;
             commit;    
             ad_sync_log.write_info($$PLSQL_UNIT || 
-                            '->mark_existing_groups number of existing: '||v_number_of_existing,
+                            '->mark_existing_group_members number of existing: '||v_number_of_existing,
                             SQLCODE,
                             SQLERRM,
                             p_process_run);
         /* bad prefix*/
-      UPDATE ad_sync_owner.AD_SYNC_GROUPS
+      UPDATE ad_sync_owner.AD_SYNC_group_members
             SET
                 status = 37 -- invalid GROUP prefix
                 , PROCESS_TIMESTAMP = current_timestamp
@@ -164,7 +164,7 @@ PROCEDURE drop_gropus_on_demand (p_start_timestamp timestamp, p_end_timestamp ti
             v_number_of_existing := SQL%ROWCOUNT;
             commit;    
             ad_sync_log.write_info($$PLSQL_UNIT || 
-                            '->mark_existing_groups number of bad prefixes: '||v_number_of_existing,
+                            '->mark_existing_group_members number of bad prefixes: '||v_number_of_existing,
                             SQLCODE,
                             SQLERRM,
                             p_process_run);
@@ -172,20 +172,20 @@ PROCEDURE drop_gropus_on_demand (p_start_timestamp timestamp, p_end_timestamp ti
     EXCEPTION
       WHEN OTHERS THEN
         ad_sync_log.write_error($$PLSQL_UNIT ||
-                            '->add_groups' ,
+                            '->add_group_members' ,
                             SQLCODE,
                             SQLERRM);
         RAISE;
-    end mark_existing_groups;
+    end mark_existing_group_members;
 
-    PROCEDURE add_groups (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number) IS
+    PROCEDURE add_group_members (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number) IS
         v_stmt VARCHAR2(4000);
         v_file_name varchar2(100);
         v_file  UTL_FILE.FILE_TYPE;
     BEGIN
         if p_process_run is not null then
         ad_sync_log.write_info($$PLSQL_UNIT || 
-                            '->add_groups started for: '||p_start_timestamp||' and '||p_end_timestamp,
+                            '->add_group_members started for: '||p_start_timestamp||' and '||p_end_timestamp,
                             SQLCODE,
                             SQLERRM,
                             p_process_run);
@@ -193,7 +193,7 @@ PROCEDURE drop_gropus_on_demand (p_start_timestamp timestamp, p_end_timestamp ti
             SELECT
                 ag.id, ag.groupname
             FROM
-                ad_sync_owner.ad_sync_GROUPs ag left join ad_sync_owner.AD_SYNC_MANAGED_GROUPS g on (au.groupname=u.groupname)
+                ad_sync_owner.ad_sync_group_members ag left join ad_sync_owner.AD_SYNC_MANAGED_group_members g on (au.groupname=u.groupname)
             WHERE
                 gu.status = 1
                 and ag.REQUESTED_OPERATION = 'C' --requested create GROUP
@@ -207,12 +207,12 @@ PROCEDURE drop_gropus_on_demand (p_start_timestamp timestamp, p_end_timestamp ti
             dbms_output.put_line(v_stmt||';');
             
             ad_sync_log.write_info($$PLSQL_UNIT || 
-                            '->add_groups create group: '|| i.groupname,
+                            '->add_group_members create group: '|| i.groupname,
                             SQLCODE,
                             SQLERRM,
                             p_process_run);
             execute immediate v_stmt;
-            UPDATE ad_sync_owner.AD_SYNC_GROUPS
+            UPDATE ad_sync_owner.AD_SYNC_group_members
             SET
                 status = 39 -- GROUP created
                 , PROCESS_TIMESTAMP = current_timestamp
@@ -224,7 +224,7 @@ PROCEDURE drop_gropus_on_demand (p_start_timestamp timestamp, p_end_timestamp ti
 
         COMMIT;
         ad_sync_log.write_info($$PLSQL_UNIT || 
-                            '->add_groups finished',
+                            '->add_group_members finished',
                             SQLCODE,
                             SQLERRM,
                             p_process_run);
@@ -232,12 +232,12 @@ PROCEDURE drop_gropus_on_demand (p_start_timestamp timestamp, p_end_timestamp ti
     EXCEPTION
       WHEN OTHERS THEN
         ad_sync_log.write_error($$PLSQL_UNIT ||
-                            '->add_groups' ,
+                            '->add_group_members' ,
                             SQLCODE,
                             SQLERRM);
         RAISE;
     
-    END add_groups;
+    END add_group_members;
 
-END ad_sync_process_groups;
+END ad_sync_process_group_members;
 /

@@ -27,7 +27,7 @@ PROCEDURE drop_users (p_start_timestamp timestamp, p_end_timestamp timestamp, p_
             SELECT
                 au.id, au.username
             FROM
-                ad_sync_owner.ad_sync_users au join all_users u on (au.username=u.username)
+                ad_sync_owner.ad_sync_users au join ad_sync_owner.AD_SYNC_MANAGED_USERS u on (au.username=u.username)
             WHERE
                 au.status = 1
                 and au.REQUESTED_OPERATION = 'D' --requested drop user
@@ -42,7 +42,7 @@ PROCEDURE drop_users (p_start_timestamp timestamp, p_end_timestamp timestamp, p_
             dbms_output.put_line(v_stmt||';');
             
             ad_sync_log.write_info($$PLSQL_UNIT || 
-                            '->lock_users lock user: '|| i.username,
+                            '->drop_users lock user: '|| i.username,
                             SQLCODE,
                             SQLERRM,
                             p_process_run);
@@ -60,14 +60,14 @@ PROCEDURE drop_users (p_start_timestamp timestamp, p_end_timestamp timestamp, p_
             dbms_output.put_line(v_stmt||';');
             
             ad_sync_log.write_info($$PLSQL_UNIT || 
-                            '->drop_users password expired: '|| i.username,
+                            '->drop_users dropped user: '|| i.username,
                             SQLCODE,
                             SQLERRM,
                             p_process_run);
             execute immediate v_stmt;
             UPDATE ad_sync_owner.ad_sync_users
             SET
-                status = 23 -- user dropped
+                status = 22 -- user dropped
                 , PROCESS_TIMESTAMP = current_timestamp
                 , load_id=p_load_id
             WHERE
@@ -106,7 +106,7 @@ PROCEDURE expire_password (p_start_timestamp timestamp, p_end_timestamp timestam
             SELECT
                 au.id, au.username
             FROM
-                ad_sync_owner.ad_sync_users au join all_users u on (au.username=u.username)
+                ad_sync_owner.ad_sync_users au join ad_sync_owner.AD_SYNC_MANAGED_USERS u on (au.username=u.username)
             WHERE
                 au.status = 1
                 and au.REQUESTED_OPERATION = 'E' --requested create user
@@ -168,7 +168,7 @@ PROCEDURE change_password (p_start_timestamp timestamp, p_end_timestamp timestam
             SELECT
                 au.id, au.username, nvl(password,ad_sync_owner.ad_sync_tools.generate_password) as password
             FROM
-                ad_sync_owner.ad_sync_users au join all_users u on (au.username=u.username)
+                ad_sync_owner.ad_sync_users au join ad_sync_owner.AD_SYNC_MANAGED_USERS u on (au.username=u.username)
             WHERE
                 au.status = 1
                 and au.REQUESTED_OPERATION = 'P' --requested create user
@@ -253,7 +253,7 @@ PROCEDURE unlock_users (p_start_timestamp timestamp, p_end_timestamp timestamp, 
             SELECT
                 au.id, au.username, ad_sync_owner.ad_sync_tools.generate_password as password
             FROM
-                ad_sync_owner.ad_sync_users au join all_users u on (au.username=u.username)
+                ad_sync_owner.ad_sync_users au join ad_sync_owner.AD_SYNC_MANAGED_USERS u on (au.username=u.username)
             WHERE
                 au.status = 1
                 and au.REQUESTED_OPERATION = 'U' --requested unlock user
@@ -310,7 +310,7 @@ PROCEDURE unlock_users (p_start_timestamp timestamp, p_end_timestamp timestamp, 
             SELECT
                 au.id, au.username, ad_sync_owner.ad_sync_tools.generate_password as password
             FROM
-                ad_sync_owner.ad_sync_users au join all_users u on (au.username=u.username)
+                ad_sync_owner.ad_sync_users au join ad_sync_owner.AD_SYNC_MANAGED_USERS u on (au.username=u.username)
             WHERE
                 au.status = 1
                 and au.REQUESTED_OPERATION = 'L' --requested lock  user
@@ -370,7 +370,7 @@ PROCEDURE unlock_users (p_start_timestamp timestamp, p_end_timestamp timestamp, 
                 , PROCESS_TIMESTAMP = current_timestamp
                 , load_id=p_load_id
             WHERE
-                username in (select username from all_users)
+                username in (select username from ad_sync_owner.AD_SYNC_MANAGED_USERS)
                 and status = 1
                 and REQUESTED_OPERATION = 'C' --requested create user
                 and username like ad_sync_owner.ad_sync_tools.get_param_value('USERNAME_PREFIX')||'%'
@@ -424,7 +424,7 @@ PROCEDURE unlock_users (p_start_timestamp timestamp, p_end_timestamp timestamp, 
             SELECT
                 au.id, au.username, nvl(au.password,ad_sync_owner.ad_sync_tools.generate_password) as password
             FROM
-                ad_sync_owner.ad_sync_users au left join all_users u on (au.username=u.username)
+                ad_sync_owner.ad_sync_users au left join ad_sync_owner.AD_SYNC_MANAGED_USERS u on (au.username=u.username)
             WHERE
                 au.status = 1
                 and au.REQUESTED_OPERATION = 'C' --requested create user
