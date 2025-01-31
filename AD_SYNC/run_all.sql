@@ -44,6 +44,7 @@ DEFINE ad_sync_interface_tablespace = ad_sync
 @views/ad_sync_owner.AD_SYNC_MANAGED_USERS.sql
 @views/ad_sync_owner.AD_SYNC_MANAGED_GROUPS.sql
 @views/ad_sync_owner.AD_SYNC_MANAGED_GROUP_MEMBERS.sql
+@views/ad_sync_owner.AD_SYNC_PROCESSING_STATUS_USERS.sql
 
 @users/ad_sync_interface.sql
 

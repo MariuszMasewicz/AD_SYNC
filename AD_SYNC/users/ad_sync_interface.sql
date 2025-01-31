@@ -7,5 +7,10 @@ CREATE USER ad_sync_interface IDENTIFIED BY &ad_sync_interface_passwd.
 DEFAULT TABLESPACE &ad_sync_interface_tablespace.
 TEMPORARY TABLESPACE &temp_tablespace.;
 -- SYSTEM PRIVILEGES
-GRANT CREATE SESSION TO ad_sync_interface ;
+
+GRANT connect TO ad_sync_interface ;
+
 GRANT execute ON ad_sync_owner.ad_sync_load TO ad_sync_interface ;
+grant read on ad_sync_owner.ad_sync_users to ad_sync_interface;
+
+ 
