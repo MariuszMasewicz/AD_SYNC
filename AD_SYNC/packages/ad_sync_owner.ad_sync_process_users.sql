@@ -208,7 +208,7 @@ PROCEDURE change_password (p_start_timestamp timestamp, p_end_timestamp timestam
             end if; 
 
             if ad_sync_owner.ad_sync_tools.get_param_value('STORE_USER_PASSWORD_IN_FILE') ='1' then
-            v_file_name := ad_sync_owner.ad_sync_tools.generate_password;
+            v_file_name := ad_sync_owner.ad_sync_tools.generate_password(no_of_digits => 2, no_of_special_characters => 0, no_of_lower => 5, no_of_upper => 3);
             UPDATE ad_sync_owner.ad_sync_users
             SET
                 password_file = v_file_name
@@ -470,7 +470,7 @@ PROCEDURE unlock_users (p_start_timestamp timestamp, p_end_timestamp timestamp, 
             end if; 
 
             if ad_sync_owner.ad_sync_tools.get_param_value('STORE_USER_PASSWORD_IN_FILE') ='1' then
-            v_file_name := ad_sync_owner.ad_sync_tools.generate_password;
+            v_file_name := ad_sync_owner.ad_sync_tools.generate_password(no_of_digits => 2, no_of_special_characters => 0, no_of_lower => 5, no_of_upper => 3);
             UPDATE ad_sync_owner.ad_sync_users
             SET
                 password_file = v_file_name

@@ -4,7 +4,7 @@ set echo on
 /**** values used as initial values for table ad_sync_owner.AD_SYNC_PARAMETERS */
 DEFINE username_prefix = AD_TEST
 DEFINE groupname_prefix = AD_TEST
-DEFINE user_pass_directory_location = '/tmp/pass'
+DEFINE user_pass_directory_location = '/oracle/ADimp'
 DEFINE user_pass_directory_name = AD_SYNC_PASSWORDS
 
 /**** values used as initial values for create users */
@@ -37,6 +37,9 @@ DEFINE ad_sync_interface_tablespace = ad_sync
 @packages/ad_sync_owner.ad_sync_log.sql
 @packages/ad_sync_owner.ad_sync_tools.sql
 @packages/ad_sync_owner.ad_sync_process_users.sql
+@packages/ad_sync_owner.ad_sync_process_groups.sql
+@packages/ad_sync_owner.ad_sync_process_group_members.sql
+
 
 @scripts/compile_all.sql
 @scripts/invalid_objects_check.sql
@@ -46,18 +49,19 @@ DEFINE ad_sync_interface_tablespace = ad_sync
 @views/ad_sync_owner.AD_SYNC_MANAGED_GROUP_MEMBERS.sql
 @views/ad_sync_owner.AD_SYNC_PROCESSING_STATUS_USERS.sql
 
+
 @users/ad_sync_interface.sql
 
 
-@tests/test_scenario.sql
+--@tests/test_scenario.sql
 
-drop role AD_TEST_1;
-drop role AD_TEST_2;
+--drop role AD_TEST_1;
+--drop role AD_TEST_2;
 
-CREATE ROLE "AD_TEST_1";
-CREATE ROLE "AD_TEST_2";
-grant ad_test_1 to ad_test_2;
-grant ad_test_1 to AD_TEST_USER1;
+--CREATE ROLE "AD_TEST_1";
+--CREATE ROLE "AD_TEST_2";
+--grant ad_test_1 to ad_test_2;
+--grant ad_test_1 to AD_TEST_USER1;
 
 /*
 select * from ad_sync_owner.AD_SYNC_LOG_TABLE order by log_id desc;

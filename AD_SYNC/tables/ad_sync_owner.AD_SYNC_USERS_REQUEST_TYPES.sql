@@ -1,18 +1,13 @@
 prompt CREATE TABLE ad_sync_owner.AD_SYNC_USERS_REQUEST_TYPES 
 CREATE TABLE ad_sync_owner.AD_SYNC_USERS_REQUEST_TYPES 
 (
-  ID char(1) NOT NULL 
+  ID char(1) PRIMARY KEY
 , REQUEST_TYPE_NAME VARCHAR2(2000) NOT NULL 
 , REQUEST_TYPE_DESCRIPTION VARCHAR2(2000) ,
 	created_timestamp   TIMESTAMP(6) DEFAULT on null systimestamp NOT NULL,
   created_user        VARCHAR2(255 CHAR) DEFAULT on null user NOT NULL,
   updated_timestamp   TIMESTAMP(6),
   updated_user        VARCHAR2(255 CHAR)
-, CONSTRAINT USERS_REQUEST_TYPES_PK PRIMARY KEY 
-  (
-    ID 
-  )
-  ENABLE 
 );
 
 prompt inserts into ad_sync_owner.AD_SYNC_STATUSES
