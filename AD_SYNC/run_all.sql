@@ -32,6 +32,8 @@ DEFINE ad_sync_interface_tablespace = ad_sync
 @tables/ad_sync_owner.AD_SYNC_PARAMETERS.sql
 @tables/ad_sync_owner.AD_SYNC_LOG_TABLE_TYPE.sql
 @tables/ad_sync_owner.AD_SYNC_LOG_TABLE.sql
+@tables/ad_sync_owner.AD_SYNC_GROUP_PERMISSION.sql
+
 
 @packages/ad_sync_owner.ad_sync_load.sql
 @packages/ad_sync_owner.ad_sync_log.sql
