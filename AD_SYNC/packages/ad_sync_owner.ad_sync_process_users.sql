@@ -403,7 +403,7 @@ PROCEDURE unlock_users (p_start_timestamp timestamp, p_end_timestamp timestamp, 
     EXCEPTION
       WHEN OTHERS THEN
         ad_sync_log.write_error($$PLSQL_UNIT ||
-                            '->add_users' ,
+                            '->mark_existing_users' ,
                             SQLCODE,
                             SQLERRM);
         RAISE;
@@ -449,6 +449,7 @@ PROCEDURE unlock_users (p_start_timestamp timestamp, p_end_timestamp timestamp, 
                             SQLERRM,
                             p_process_run);
             execute immediate v_stmt;
+            execute immediate 'grant connect to '||i.username ;
             if ad_sync_owner.ad_sync_tools.get_param_value('STORE_USER_PASSWORD_IN_TABLE') ='1' then
             UPDATE ad_sync_owner.ad_sync_users
             SET
