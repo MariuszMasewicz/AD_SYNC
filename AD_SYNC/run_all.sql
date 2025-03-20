@@ -15,9 +15,14 @@ DEFINE ad_sync_owner_tablespace = ad_sync
 DEFINE ad_sync_interface_passwd = Passw0rd2
 DEFINE ad_sync_interface_tablespace = ad_sync
 
+/*create as sys user*/
 --@tablespace/ad_sync.sql
-
+@functions/sys.ad_sync_default_password_verify_function.sql
+@profiles/ad_sync_default_profile.sql
 @users/ad_sync_owner.sql
+
+
+/*create as sys or dba user*/
 @directories/ad_sync_passwords.sql
 
 @sequences/ad_sync_owner_sequences.sql
@@ -34,6 +39,10 @@ DEFINE ad_sync_interface_tablespace = ad_sync
 @tables/ad_sync_owner.AD_SYNC_LOG_TABLE.sql
 @tables/ad_sync_owner.AD_SYNC_GROUP_PERMISSION.sql
 
+@views/ad_sync_owner.AD_SYNC_MANAGED_USERS.sql
+@views/ad_sync_owner.AD_SYNC_MANAGED_GROUPS.sql
+@views/ad_sync_owner.AD_SYNC_MANAGED_GROUP_MEMBERS.sql
+@views/ad_sync_owner.AD_SYNC_PROCESSING_STATUS_USERS.sql
 
 @packages/ad_sync_owner.ad_sync_load.sql
 @packages/ad_sync_owner.ad_sync_log.sql
@@ -42,15 +51,8 @@ DEFINE ad_sync_interface_tablespace = ad_sync
 @packages/ad_sync_owner.ad_sync_process_groups.sql
 @packages/ad_sync_owner.ad_sync_process_group_members.sql
 
-
 @scripts/compile_all.sql
 @scripts/invalid_objects_check.sql
-
-@views/ad_sync_owner.AD_SYNC_MANAGED_USERS.sql
-@views/ad_sync_owner.AD_SYNC_MANAGED_GROUPS.sql
-@views/ad_sync_owner.AD_SYNC_MANAGED_GROUP_MEMBERS.sql
-@views/ad_sync_owner.AD_SYNC_PROCESSING_STATUS_USERS.sql
-
 
 @users/ad_sync_interface.sql
 

@@ -40,3 +40,34 @@ SELECT 'grant '||permission||' on '||schema||'.'||object_name ||' to '||groupnam
   from  ad_sync_owner.ad_sync_group_permission
     where object_name <>'*';
 */
+
+/*
+select * 
+from AD_SYNC_OWNER.AD_SYNC_GROUP_PERMISSION
+where schema <> '*'
+and object_name='*';
+
+set serveroutput on
+declare 
+v_stmt varchar2(4000);
+begin
+for j in (select * 
+from AD_SYNC_OWNER.AD_SYNC_GROUP_PERMISSION
+where schema <> '*'
+and object_name='*') loop
+for i in (select * from dba_tables where owner=j.schema)
+loop
+v_stmt:='grant '||j.permission||' on '||j.schema||'.'||i.table_name||' to '||j.groupname;
+--dbms_output.put_line();
+begin
+execute immediate v_stmt;
+--dbms_output.put_line(v_stmt);
+exception
+  when others then dbms_output.put_line(v_stmt);
+end;  
+end loop;
+end loop;
+end;
+/
+
+*/
