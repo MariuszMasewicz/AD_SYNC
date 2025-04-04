@@ -48,26 +48,25 @@ where schema <> '*'
 and object_name='*';
 
 set serveroutput on
-declare 
-v_stmt varchar2(4000);
 begin
 for j in (select * 
 from AD_SYNC_OWNER.AD_SYNC_GROUP_PERMISSION
 where schema <> '*'
 and object_name='*') loop
-for i in (select * from dba_tables where owner=j.schema)
+for i in (select 'grant '||j.permission||' on '||j.schema||'.'||object_name||' to '||j.groupname as stmt
+          from dba_objects 
+          where owner=j.schema
+          and object_type in ('TABLE', 'VIEW', 'MATERIALIZED VIEW')
+          order by object_type, object_name)
 loop
-v_stmt:='grant '||j.permission||' on '||j.schema||'.'||i.table_name||' to '||j.groupname;
---dbms_output.put_line();
 begin
-execute immediate v_stmt;
---dbms_output.put_line(v_stmt);
+dbms_output.put_line(i.stmt);
+execute immediate i.stmt;
 exception
-  when others then dbms_output.put_line(v_stmt);
+  when others then dbms_output.put_line('ERROR: '||i.stmt);
 end;  
 end loop;
 end loop;
 end;
 /
-
 */
