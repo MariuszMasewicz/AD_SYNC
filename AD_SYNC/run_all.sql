@@ -20,6 +20,7 @@ DEFINE ad_sync_interface_tablespace = ad_sync
 @functions/sys.ad_sync_default_password_verify_function.sql
 @profiles/ad_sync_default_profile.sql
 @users/ad_sync_owner.sql
+@users/ad_sync_interface.sql
 
 
 /*create as sys or dba user*/
@@ -54,7 +55,7 @@ DEFINE ad_sync_interface_tablespace = ad_sync
 @scripts/compile_all.sql
 @scripts/invalid_objects_check.sql
 
-@users/ad_sync_interface.sql
+@users/ad_sync_interface_grants.sql
 
 
 --@tests/test_scenario.sql
