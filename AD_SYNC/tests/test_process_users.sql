@@ -25,5 +25,7 @@ ad_sync_owner.ad_sync_process_users.drop_users (v_start_timestamp,  v_end_timest
 ad_sync_owner.ad_sync_process_groups.add_groups (v_start_timestamp,  v_end_timestamp ,v_process_run, v_load_id);
 ad_sync_owner.ad_sync_process_groups.mark_existing_groups (v_start_timestamp,  v_end_timestamp ,v_process_run, v_load_id);
 
+ad_sync_owner.ad_sync_process_group_members.add_group_members (v_start_timestamp,  v_end_timestamp ,v_process_run, v_load_id);
+
 end;
 /
