@@ -12,5 +12,8 @@ SELECT
     process_timestamp
 FROM
     ad_sync_owner.ad_sync_users u join ad_sync_owner.ad_sync_statuses s on u.status=s.id
-where password_file is not null
-and process_timestamp = (select max(process_timestamp) from ad_sync_owner.ad_sync_users u1 where u.username=u1.username and password_file is not null);
+where 1=1
+--and password_file is not null
+and process_timestamp = (select max(process_timestamp) from ad_sync_owner.ad_sync_users u1 where u.username=u1.username 
+--and password_file is not null
+);
