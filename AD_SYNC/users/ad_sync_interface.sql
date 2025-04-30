@@ -1,4 +1,4 @@
-prompt DROP USER ad_sync_interface cascade
+prompt ad_sync_interface 
 DROP USER ad_sync_interface cascade;
 
 prompt CREATE USER ad_sync_interface

@@ -20,6 +20,7 @@ DEFINE ad_sync_interface_tablespace = ad_sync
 @functions/sys.ad_sync_default_password_verify_function.sql
 @profiles/ad_sync_default_profile.sql
 @users/ad_sync_owner.sql
+@users/ad_sync_owner_grants.sql
 @users/ad_sync_interface.sql
 
 
@@ -56,43 +57,4 @@ DEFINE ad_sync_interface_tablespace = ad_sync
 @scripts/invalid_objects_check.sql
 
 @users/ad_sync_interface_grants.sql
-
-
---@tests/test_scenario.sql
-
---drop role AD_TEST_1;
---drop role AD_TEST_2;
-
---CREATE ROLE "AD_TEST_1";
---CREATE ROLE "AD_TEST_2";
---grant ad_test_1 to ad_test_2;
---grant ad_test_1 to AD_TEST_USER1;
-
-/*
-select * from ad_sync_owner.AD_SYNC_LOG_TABLE order by log_id desc;
-select * from ad_sync_owner.AD_SYNC_PARAMETERS;
-select * from ad_sync_owner.ad_sync_users;
-select * from all_users where username like '&username_prefix.'||'%'
-
-select * from ad_sync_owner.AD_SYNC_MANAGED_USERS;
-select * from ad_sync_owner.AD_SYNC_MANAGED_GROUPS;
-select * from ad_sync_owner.AD_SYNC_MANAGED_GROUP_MEMBERS;
-
-
-select * from dba_users where username like ad_sync_owner.ad_sync_tools.get_param_value('USERNAME_PREFIX')||'%' order by username;
-select * from dba_roles;
-select * from role_role_privs;
-select * from dba_role_privs;
-
-select ROLE,	GRANTED_ROLE,	ADMIN_OPTION,	COMMON,	INHERITED 
-from sys.role_role_privs 
---where role like ad_sync_owner.ad_sync_tools.get_param_value('GROUPNAME_PREFIX')||'%' 
---and GRANTED_ROLE  like ad_sync_owner.ad_sync_tools.get_param_value('GROUPNAME_PREFIX')||'%' 
-union all 
-select GRANTED_ROLE,	GRANTEE,	ADMIN_OPTION,	COMMON,	INHERITED 
-from sys.dba_role_privs 
---where username like ad_sync_owner.ad_sync_tools.get_param_value('USERNAME_PREFIX')||'%' 
---and GRANTED_ROLE  like ad_sync_owner.ad_sync_tools.get_param_value('GROUPNAME_PREFIX')||'%' ;
-
-select ad_sync_owner.ad_sync_tools.get_param_value('USERNAME_PREFIX') from dual;
-*/                
+             
