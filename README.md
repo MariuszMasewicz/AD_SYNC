@@ -1,2 +1,4 @@
 # AD_SYNC
-Synchronize MIcrosoft AD users and groups with Oracle
+https://github.com/MariuszMasewicz/AD_SYNC
+
+Synchronize Microsoft AD users and groups with Oracle Database users and roles
