@@ -13,6 +13,8 @@ set echo on
 @packages/ad_sync_owner.ad_sync_process_groups.sql
 @packages/ad_sync_owner.ad_sync_process_group_members.sql
 
+@jobs/AD_SYNC_PROCESS_LOAD.sql
+
 @scripts/compile_all.sql
 @scripts/invalid_objects_check.sql
 
