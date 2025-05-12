@@ -1,13 +1,5 @@
-prompt ad_sync_owner 
-DROP USER ad_sync_owner cascade;
+prompt ad_sync_owner_grants 
 
-prompt CREATE USER ad_sync_owner
--- USER SQL
-CREATE USER ad_sync_owner IDENTIFIED BY &ad_sync_owner_passwd.  
-DEFAULT TABLESPACE &ad_sync_owner_tablespace.
-TEMPORARY TABLESPACE &temp_tablespace.;
--- QUOTAS
-ALTER USER ad_sync_owner QUOTA UNLIMITED ON &ad_sync_owner_tablespace.;
 -- SYSTEM PRIVILEGES
 GRANT connect TO ad_sync_owner ;
 GRANT CREATE TABLE TO ad_sync_owner ;
