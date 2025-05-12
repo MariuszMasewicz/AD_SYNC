@@ -1,0 +1,1 @@
+10 * * * * /u01/AD_SYNC/scripts/AD_SYNC_loader.sh >> /u01/AD_SYNC/logs/AD_SYNC_loader.log 2>&1
