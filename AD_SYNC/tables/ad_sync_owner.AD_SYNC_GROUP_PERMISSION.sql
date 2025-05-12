@@ -47,6 +47,7 @@ from AD_SYNC_OWNER.AD_SYNC_GROUP_PERMISSION
 where schema <> '*'
 and object_name='*';
 
+------ grant object privileges
 set serveroutput on
 begin
 for j in (select * 
@@ -66,6 +67,24 @@ exception
   when others then dbms_output.put_line('ERROR: '||i.stmt);
 end;  
 end loop;
+end loop;
+end;
+/
+
+-- grant system privileges and roles
+set serveroutput on
+begin
+for j in (select 'grant '||permission||'  to '||groupname as stmt 
+from AD_SYNC_OWNER.AD_SYNC_GROUP_PERMISSION
+where schema = '*'
+and object_name is null) 
+loop
+begin
+dbms_output.put_line(j.stmt);
+execute immediate j.stmt;
+exception
+  when others then dbms_output.put_line('ERROR: '||j.stmt);
+end;  
 end loop;
 end;
 /
