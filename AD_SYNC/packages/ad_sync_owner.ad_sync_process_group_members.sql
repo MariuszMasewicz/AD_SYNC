@@ -2,8 +2,8 @@ prompt CREATE OR REPLACE PACKAGE  ad_sync_owner.ad_sync_process_group_members
 
 CREATE OR REPLACE PACKAGE  ad_sync_owner.ad_sync_process_group_members AUTHID current_user AS
     PROCEDURE add_group_members (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
-    --PROCEDURE drop_gropus_not_exist_in_load (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
-    --PROCEDURE drop_gropus_on_demand (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
+    --PROCEDURE drop_group_members_not_exist_in_load (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
+    --PROCEDURE drop_group_member_on_demand (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
     --PROCEDURE mark_existing_group_members (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
 END ad_sync_process_group_members;
 /
@@ -11,7 +11,7 @@ END ad_sync_process_group_members;
 prompt CREATE OR REPLACE PACKAGE BODY ad_sync_owner.ad_sync_process_group_members
 CREATE OR REPLACE PACKAGE BODY ad_sync_owner.ad_sync_process_group_members AS
 
-/*PROCEDURE drop_gropus_not_exist_in_load (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number) as
+/*PROCEDURE drop_group_members_not_exist_in_loads_not_exist_in_load (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number) as
         v_stmt VARCHAR2(4000);
     BEGIN
         if p_process_run is not null then
@@ -61,10 +61,10 @@ CREATE OR REPLACE PACKAGE BODY ad_sync_owner.ad_sync_process_group_members AS
                             SQLERRM);
         RAISE;
     
-    END drop_gropus_not_exist_in_load;
+    END drop_group_members_not_exist_in_load;
 */
 /*
-PROCEDURE drop_gropus_on_demand (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number) as
+PROCEDURE drop_group_member_on_demand (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number) as
         v_stmt VARCHAR2(4000);
     BEGIN
         if p_process_run is not null then
@@ -121,7 +121,7 @@ PROCEDURE drop_gropus_on_demand (p_start_timestamp timestamp, p_end_timestamp ti
                             SQLERRM);
         RAISE;
     
-    END drop_gropus_on_demand;
+    END drop_group_member_on_demand;
   
     PROCEDURE mark_existing_group_members (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number) is
     v_number_of_existing pls_integer;

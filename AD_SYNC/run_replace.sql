@@ -12,6 +12,7 @@ set echo on
 @packages/ad_sync_owner.ad_sync_process_users.sql
 @packages/ad_sync_owner.ad_sync_process_groups.sql
 @packages/ad_sync_owner.ad_sync_process_group_members.sql
+@packages/ad_sync_process_group_privileges.sql
 
 @jobs/AD_SYNC_PROCESS_LOAD.sql
 
