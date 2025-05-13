@@ -1,5 +1,10 @@
 #!/bin/bash
 
+export ORACLE_HOME=/u01/product/19/db_1
+export ORACLE_BASE=/u01
+export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch:$PATH:$HOME/.local/bin:$HOME/bin
+export ORACLE_SID=ORCL
+
 AD_SYNC_dir="/u01/AD_SYNC"
 
 # Wyświetlenie daty i godziny rozpoczęcia
