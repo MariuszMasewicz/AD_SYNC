@@ -52,7 +52,6 @@ end;
    
   
     
-    DBMS_SCHEDULER.enable(
-             name => '"AD_SYNC_OWNER"."AD_SYNC_PROCESS_LOAD"');
+    --DBMS_SCHEDULER.enable(name => '"AD_SYNC_OWNER"."AD_SYNC_PROCESS_LOAD"');
 END;
 /
