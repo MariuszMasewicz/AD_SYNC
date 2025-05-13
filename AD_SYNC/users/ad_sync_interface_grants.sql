@@ -1,18 +1,25 @@
 prompt ad_sync_interface_grants
 
+GRANT CONNECT TO AD_SYNC_INTERFACE;
 
-GRANT connect TO ad_sync_interface ;
+GRANT EXECUTE ON AD_SYNC_OWNER.AD_SYNC_LOAD TO AD_SYNC_INTERFACE;
 
-GRANT execute ON ad_sync_owner.ad_sync_load TO ad_sync_interface ;
-grant read on ad_sync_owner.ad_sync_users to ad_sync_interface;
-grant read on ad_sync_owner.ad_sync_statuses to ad_sync_interface;
-grant read on ad_sync_owner.AD_SYNC_PROCESSING_STATUS_USERS to ad_sync_interface;
-grant read on AD_SYNC_OWNER.AD_SYNC_MANAGED_USERS to ad_sync_interface;
-grant read on AD_SYNC_OWNER.AD_SYNC_MANAGED_GROUPS to ad_sync_interface;
-grant read on AD_SYNC_OWNER.AD_SYNC_MANAGED_GROUP_MEMBERS to ad_sync_interface;
+GRANT READ ON AD_SYNC_OWNER.AD_SYNC_USERS TO AD_SYNC_INTERFACE;
 
+GRANT READ ON AD_SYNC_OWNER.AD_SYNC_STATUSES TO AD_SYNC_INTERFACE;
 
-grant select on sys.dba_users to ad_sync_interface;
-grant select on sys.dba_roles to ad_sync_interface;
-grant select on sys.dba_role_privs to ad_sync_interface;
-grant select on sys.role_role_privs to ad_sync_interface;
+GRANT READ ON AD_SYNC_OWNER.AD_SYNC_PROCESSING_STATUS_USERS TO AD_SYNC_INTERFACE;
+
+GRANT READ ON AD_SYNC_OWNER.AD_SYNC_MANAGED_USERS TO AD_SYNC_INTERFACE;
+
+GRANT READ ON AD_SYNC_OWNER.AD_SYNC_MANAGED_GROUPS TO AD_SYNC_INTERFACE;
+
+GRANT READ ON AD_SYNC_OWNER.AD_SYNC_MANAGED_GROUP_MEMBERS TO AD_SYNC_INTERFACE;
+
+GRANT SELECT ON SYS.DBA_USERS TO AD_SYNC_INTERFACE;
+
+GRANT SELECT ON SYS.DBA_ROLES TO AD_SYNC_INTERFACE;
+
+GRANT SELECT ON SYS.DBA_ROLE_PRIVS TO AD_SYNC_INTERFACE;
+
+GRANT SELECT ON SYS.ROLE_ROLE_PRIVS TO AD_SYNC_INTERFACE;

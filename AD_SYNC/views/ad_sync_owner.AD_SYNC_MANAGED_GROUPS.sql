@@ -1,9 +1,20 @@
 prompt CREATE OR REPLACE VIEW ad_sync_owner.AD_SYNC_MANAGED_GROUPS
 
-CREATE OR REPLACE VIEW ad_sync_owner.AD_SYNC_MANAGED_GROUPS
-as
-select ROLE as groupname, ROLE_ID,	PASSWORD_REQUIRED,	AUTHENTICATION_TYPE,	COMMON,	ORACLE_MAINTAINED,	INHERITED,	IMPLICIT,	EXTERNAL_NAME 
-from sys.dba_roles 
-where role like ad_sync_owner.ad_sync_tools.get_param_value('GROUPNAME_PREFIX')||'%' 
-order by role;
-
+CREATE OR REPLACE VIEW AD_SYNC_OWNER.AD_SYNC_MANAGED_GROUPS AS
+    SELECT
+        ROLE                AS GROUPNAME,
+        ROLE_ID,
+        PASSWORD_REQUIRED,
+        AUTHENTICATION_TYPE,
+        COMMON,
+        ORACLE_MAINTAINED,
+        INHERITED,
+        IMPLICIT,
+        EXTERNAL_NAME
+    FROM
+        SYS.DBA_ROLES
+    WHERE
+        ROLE LIKE AD_SYNC_OWNER.AD_SYNC_TOOLS.GET_PARAM_VALUE('GROUPNAME_PREFIX')
+                                              ||'%'
+    ORDER BY
+        ROLE;

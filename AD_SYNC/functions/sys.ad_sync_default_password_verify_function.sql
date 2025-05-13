@@ -1,32 +1,31 @@
-create or replace NONEDITIONABLE function sys.ad_sync_default_password_verify_function 
- ( username     varchar2,
-   password     varchar2,
-   old_password varchar2)
- return boolean IS
-   differ  integer;
-   lang    varchar2(512);
-   message varchar2(512);
-   ret     number;
-
-begin
+CREATE OR REPLACE NONEDITIONABLE FUNCTION SYS.AD_SYNC_DEFAULT_PASSWORD_VERIFY_FUNCTION (
+   USERNAME VARCHAR2,
+   PASSWORD VARCHAR2,
+   OLD_PASSWORD VARCHAR2
+) RETURN BOOLEAN IS
+   DIFFER  INTEGER;
+   LANG    VARCHAR2(512);
+   MESSAGE VARCHAR2(512);
+   RET     NUMBER;
+BEGIN
+ 
    -- Get the cur context lang and use utl_lms for messages- Bug 22730089
-   lang := sys_context('userenv','lang');
-   lang := substr(lang,1,instr(lang,'_')-1);
-
-   if not ora_complexity_check(password, chars => 12, uppercase => 1, lowercase => 1,
-                           digit => 1, special => 1) then
-      return(false);
-   end if;
+   LANG := SYS_CONTEXT('userenv', 'lang');
+   LANG := SUBSTR(LANG, 1, INSTR(LANG, '_')-1);
+   IF NOT ORA_COMPLEXITY_CHECK(PASSWORD, CHARS => 12, UPPERCASE => 1, LOWERCASE => 1, DIGIT => 1, SPECIAL => 1) THEN
+      RETURN(FALSE);
+   END IF;
+ 
 
    -- Check if the password differs from the previous password by at least
    -- 8 characters
-   if old_password is not null then
-      differ := ora_string_distance(old_password, password);
-      if differ < 8 then
-         ret := utl_lms.get_message(28211, 'RDBMS', 'ORA', lang, message);
-         raise_application_error(-20000, utl_lms.format_message(message, 'eight'));
-      end if;
-   end if;
+   IF OLD_PASSWORD IS NOT NULL THEN
+      DIFFER := ORA_STRING_DISTANCE(OLD_PASSWORD, PASSWORD);
+      IF DIFFER < 8 THEN
+         RET := UTL_LMS.GET_MESSAGE(28211, 'RDBMS', 'ORA', LANG, MESSAGE);
+         RAISE_APPLICATION_ERROR(-20000, UTL_LMS.FORMAT_MESSAGE(MESSAGE, 'eight'));
+      END IF;
+   END IF;
 
-   return(true);
-end ad_sync_default_password_verify_function;
+   RETURN(TRUE);
+END AD_SYNC_DEFAULT_PASSWORD_VERIFY_FUNCTION;

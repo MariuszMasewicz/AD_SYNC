@@ -1,23 +1,36 @@
-prompt ad_sync_owner 
-DROP USER ad_sync_owner cascade;
+prompt ad_sync_owner
+
+DROP USER AD_SYNC_OWNER CASCADE;
 
 prompt CREATE USER ad_sync_owner
--- USER SQL
-CREATE USER ad_sync_owner IDENTIFIED BY &ad_sync_owner_passwd.  
-DEFAULT TABLESPACE &ad_sync_owner_tablespace.
-TEMPORARY TABLESPACE &temp_tablespace.;
--- QUOTAS
-ALTER USER ad_sync_owner QUOTA UNLIMITED ON &ad_sync_owner_tablespace.;
--- SYSTEM PRIVILEGES
-GRANT connect TO ad_sync_owner ;
-GRANT CREATE TABLE TO ad_sync_owner ;
-GRANT CREATE PROCEDURE TO ad_sync_owner ;
-GRANT CREATE VIEW TO ad_sync_owner ;
-GRANT CREATE SEQUENCE TO ad_sync_owner ;
-GRANT INHERIT PRIVILEGES ON USER SYS TO ad_sync_owner;
 
-grant select on sys.dba_users to ad_sync_owner with grant option; 
-grant select on sys.dba_roles to ad_sync_owner with grant option;
-grant select on sys.dba_role_privs to ad_sync_owner with grant option;
-grant select on sys.role_role_privs to ad_sync_owner with grant option;
-grant read on dba_objects to AD_SYNC_OWNER;
+-- USER SQL
+CREATE USER AD_SYNC_OWNER IDENTIFIED BY &AD_SYNC_OWNER_PASSWD.
+DEFAULT TABLESPACE &AD_SYNC_OWNER_TABLESPACE.
+TEMPORARY TABLESPACE &TEMP_TABLESPACE.;
+
+-- QUOTAS
+ALTER USER AD_SYNC_OWNER QUOTA UNLIMITED ON &AD_SYNC_OWNER_TABLESPACE.;
+
+-- SYSTEM PRIVILEGES
+GRANT CONNECT TO AD_SYNC_OWNER;
+
+GRANT CREATE TABLE TO AD_SYNC_OWNER;
+
+GRANT CREATE PROCEDURE TO AD_SYNC_OWNER;
+
+GRANT CREATE VIEW TO AD_SYNC_OWNER;
+
+GRANT CREATE SEQUENCE TO AD_SYNC_OWNER;
+
+GRANT INHERIT PRIVILEGES ON USER SYS TO AD_SYNC_OWNER;
+
+GRANT SELECT ON SYS.DBA_USERS TO AD_SYNC_OWNER WITH GRANT OPTION;
+
+GRANT SELECT ON SYS.DBA_ROLES TO AD_SYNC_OWNER WITH GRANT OPTION;
+
+GRANT SELECT ON SYS.DBA_ROLE_PRIVS TO AD_SYNC_OWNER WITH GRANT OPTION;
+
+GRANT SELECT ON SYS.ROLE_ROLE_PRIVS TO AD_SYNC_OWNER WITH GRANT OPTION;
+
+GRANT READ ON DBA_OBJECTS TO AD_SYNC_OWNER;

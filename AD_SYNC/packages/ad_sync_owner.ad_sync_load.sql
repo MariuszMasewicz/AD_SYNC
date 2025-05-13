@@ -1,89 +1,142 @@
 prompt CREATE OR REPLACE PACKAGE ad_sync_owner.ad_sync_load
 
-CREATE OR REPLACE PACKAGE ad_sync_owner.ad_sync_load AS
+CREATE OR REPLACE PACKAGE AD_SYNC_OWNER.AD_SYNC_LOAD AS
 
-procedure init_load (p_LOAD_TYPE char);
-procedure finish_load;
-procedure add_user_to_load (p_username varchar2, p_password varchar2 default null, p_REQUESTED_OPERATION char default 'C');
-procedure add_group_to_load (p_groupname varchar2, p_REQUESTED_OPERATION char default 'C');
-procedure add_group_member_to_load (p_groupname varchar2, p_member varchar2, p_REQUESTED_OPERATION char default 'C');
+  PROCEDURE INIT_LOAD (
+    P_LOAD_TYPE CHAR
+  );
 
-END ad_sync_load;
+  PROCEDURE FINISH_LOAD;
+
+  PROCEDURE ADD_USER_TO_LOAD (
+    P_USERNAME VARCHAR2,
+    P_PASSWORD VARCHAR2 DEFAULT NULL,
+    P_REQUESTED_OPERATION CHAR DEFAULT 'C'
+  );
+
+  PROCEDURE ADD_GROUP_TO_LOAD (
+    P_GROUPNAME VARCHAR2,
+    P_REQUESTED_OPERATION CHAR DEFAULT 'C'
+  );
+
+  PROCEDURE ADD_GROUP_MEMBER_TO_LOAD (
+    P_GROUPNAME VARCHAR2,
+    P_MEMBER VARCHAR2,
+    P_REQUESTED_OPERATION CHAR DEFAULT 'C'
+  );
+END AD_SYNC_LOAD;
 /
 
 prompt CREATE OR REPLACE PACKAGE BODY ad_sync_owner.ad_sync_load
 
-CREATE OR REPLACE PACKAGE BODY ad_sync_owner.ad_sync_load  AS
-procedure init_load (p_LOAD_TYPE char) is   
-begin
-INSERT INTO ad_sync_owner.AD_SYNC_HISTORY (sync_status, load_id, LOAD_TYPE) values (2, ad_sync_owner.AD_SYNC_LOAD_SEQ.nextval, p_LOAD_TYPE); -- sync started
-commit;
+CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_LOAD AS
+
+  PROCEDURE INIT_LOAD (
+    P_LOAD_TYPE CHAR
+  ) IS
+  BEGIN
+    INSERT INTO AD_SYNC_OWNER.AD_SYNC_HISTORY (
+      SYNC_STATUS,
+      LOAD_ID,
+      LOAD_TYPE
+    ) VALUES (
+      2,
+      AD_SYNC_OWNER.AD_SYNC_LOAD_SEQ.NEXTVAL,
+      P_LOAD_TYPE
+    ); -- sync started
+    COMMIT;
   EXCEPTION
     WHEN OTHERS THEN
-      ad_sync_owner.ad_sync_log.write_error($$PLSQL_UNIT ||
-                          '->init_load' ,
-                          SQLCODE,
-                          SQLERRM);
+      AD_SYNC_OWNER.AD_SYNC_LOG.WRITE_ERROR($$PLSQL_UNIT
+                                            || '->init_load', SQLCODE, SQLERRM);
       ROLLBACK;
       RAISE;
+  END INIT_LOAD;
 
-end init_load;
-
-procedure finish_load is   
-begin
-INSERT INTO ad_sync_owner.AD_SYNC_HISTORY (sync_status) values (3); -- sync finished
-commit;
+  PROCEDURE FINISH_LOAD IS
+  BEGIN
+    INSERT INTO AD_SYNC_OWNER.AD_SYNC_HISTORY (
+      SYNC_STATUS
+    ) VALUES (
+      3
+    ); -- sync finished
+    COMMIT;
   EXCEPTION
     WHEN OTHERS THEN
-      ad_sync_owner.ad_sync_log.write_error($$PLSQL_UNIT ||
-                          '->finish_load' ,
-                          SQLCODE,
-                          SQLERRM);
+      AD_SYNC_OWNER.AD_SYNC_LOG.WRITE_ERROR($$PLSQL_UNIT
+                                            || '->finish_load', SQLCODE, SQLERRM);
       ROLLBACK;
       RAISE;
-end finish_load;
+  END FINISH_LOAD;
 
-procedure add_user_to_load (p_username varchar2, p_password varchar2 default null, p_REQUESTED_OPERATION char default 'C') is   
-begin
-INSERT INTO ad_sync_owner.ad_sync_users (username, PASSWORD, REQUESTED_OPERATION) VALUES (upper(p_username), p_PASSWORD, upper(p_REQUESTED_OPERATION));
-commit;
+  PROCEDURE ADD_USER_TO_LOAD (
+    P_USERNAME VARCHAR2,
+    P_PASSWORD VARCHAR2 DEFAULT NULL,
+    P_REQUESTED_OPERATION CHAR DEFAULT 'C'
+  ) IS
+  BEGIN
+    INSERT INTO AD_SYNC_OWNER.AD_SYNC_USERS (
+      USERNAME,
+      PASSWORD,
+      REQUESTED_OPERATION
+    ) VALUES (
+      UPPER(P_USERNAME),
+      P_PASSWORD,
+      UPPER(P_REQUESTED_OPERATION)
+    );
+    COMMIT;
   EXCEPTION
     WHEN OTHERS THEN
-      ad_sync_owner.ad_sync_log.write_error($$PLSQL_UNIT ||
-                          '->add_user_to_load: '|| p_username,
-                          SQLCODE,
-                          SQLERRM);
+      AD_SYNC_OWNER.AD_SYNC_LOG.WRITE_ERROR($$PLSQL_UNIT
+                                            || '->add_user_to_load: '
+                                            || P_USERNAME, SQLCODE, SQLERRM);
       ROLLBACK;
       RAISE;
-end add_user_to_load;
+  END ADD_USER_TO_LOAD;
 
-procedure add_group_to_load (p_groupname varchar2, p_REQUESTED_OPERATION char default 'C') is   
-begin
-INSERT INTO ad_sync_owner.AD_SYNC_GROUPS (groupname) VALUES  (upper(p_groupname));
-commit;
+  PROCEDURE ADD_GROUP_TO_LOAD (
+    P_GROUPNAME VARCHAR2,
+    P_REQUESTED_OPERATION CHAR DEFAULT 'C'
+  ) IS
+  BEGIN
+    INSERT INTO AD_SYNC_OWNER.AD_SYNC_GROUPS (
+      GROUPNAME
+    ) VALUES (
+      UPPER(P_GROUPNAME)
+    );
+    COMMIT;
   EXCEPTION
     WHEN OTHERS THEN
-      ad_sync_owner.ad_sync_log.write_error($$PLSQL_UNIT ||
-                          '->add_group_to_load: '|| p_groupname,
-                          SQLCODE,
-                          SQLERRM);
+      AD_SYNC_OWNER.AD_SYNC_LOG.WRITE_ERROR($$PLSQL_UNIT
+                                            || '->add_group_to_load: '
+                                            || P_GROUPNAME, SQLCODE, SQLERRM);
       ROLLBACK;
       RAISE;
-end add_group_to_load;
+  END ADD_GROUP_TO_LOAD;
 
-procedure add_group_member_to_load (p_groupname varchar2, p_member varchar2, p_REQUESTED_OPERATION char default 'C') is   
-begin
-INSERT INTO ad_sync_owner.AD_SYNC_GROUP_MEMBERS (groupname,member) VALUES (upper(p_groupname), upper(p_member));
-commit;
+  PROCEDURE ADD_GROUP_MEMBER_TO_LOAD (
+    P_GROUPNAME VARCHAR2,
+    P_MEMBER VARCHAR2,
+    P_REQUESTED_OPERATION CHAR DEFAULT 'C'
+  ) IS
+  BEGIN
+    INSERT INTO AD_SYNC_OWNER.AD_SYNC_GROUP_MEMBERS (
+      GROUPNAME,
+      MEMBER
+    ) VALUES (
+      UPPER(P_GROUPNAME),
+      UPPER(P_MEMBER)
+    );
+    COMMIT;
   EXCEPTION
     WHEN OTHERS THEN
-      ad_sync_owner.ad_sync_log.write_error($$PLSQL_UNIT ||
-                          '->add_group_member_to_load: '|| p_groupname||':'||p_member,
-                          SQLCODE,
-                          SQLERRM);
+      AD_SYNC_OWNER.AD_SYNC_LOG.WRITE_ERROR($$PLSQL_UNIT
+                                            || '->add_group_member_to_load: '
+                                            || P_GROUPNAME
+                                            ||':'
+                                            ||P_MEMBER, SQLCODE, SQLERRM);
       ROLLBACK;
       RAISE;
-end add_group_member_to_load;
-
-END ad_sync_load;
+  END ADD_GROUP_MEMBER_TO_LOAD;
+END AD_SYNC_LOAD;
 /

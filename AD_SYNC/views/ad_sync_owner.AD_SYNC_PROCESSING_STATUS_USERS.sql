@@ -1,19 +1,27 @@
 prompt CREATE OR REPLACE VIEW ad_sync_owner.AD_SYNC_PROCESSING_STATUS_USERS
 
-CREATE OR REPLACE VIEW ad_sync_owner.AD_SYNC_PROCESSING_STATUS_USERS
-as
-SELECT
-    username,
-    requested_operation,
-    password_file,
-    status,
-    status_name,
-    status_description,
-    process_timestamp
-FROM
-    ad_sync_owner.ad_sync_users u join ad_sync_owner.ad_sync_statuses s on u.status=s.id
-where 1=1
---and password_file is not null
-and process_timestamp = (select max(process_timestamp) from ad_sync_owner.ad_sync_users u1 where u.username=u1.username 
---and password_file is not null
-);
+CREATE OR REPLACE VIEW AD_SYNC_OWNER.AD_SYNC_PROCESSING_STATUS_USERS AS
+    SELECT
+        USERNAME,
+        REQUESTED_OPERATION,
+        PASSWORD_FILE,
+        STATUS,
+        STATUS_NAME,
+        STATUS_DESCRIPTION,
+        PROCESS_TIMESTAMP
+    FROM
+        AD_SYNC_OWNER.AD_SYNC_USERS    U
+        JOIN AD_SYNC_OWNER.AD_SYNC_STATUSES S
+        ON U.STATUS=S.ID
+    WHERE
+        1=1
+ --and password_file is not null
+        AND PROCESS_TIMESTAMP = (
+            SELECT
+                MAX(PROCESS_TIMESTAMP)
+            FROM
+                AD_SYNC_OWNER.AD_SYNC_USERS U1
+            WHERE
+                U.USERNAME=U1.USERNAME
+ --and password_file is not null
+        );

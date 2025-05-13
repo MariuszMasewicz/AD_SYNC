@@ -1,37 +1,155 @@
 prompt CREATE TABLE ad_sync_owner.AD_SYNC_PARAMETERS
 
-CREATE TABLE ad_sync_owner.AD_SYNC_PARAMETERS (
-  parameter_name   VARCHAR2(100 CHAR) PRIMARY KEY,
-  parameter_value   VARCHAR2(200 CHAR),
-	description varchar2(4000 char),
-	created_timestamp   TIMESTAMP(6) DEFAULT on null systimestamp NOT NULL,
-  created_user        VARCHAR2(255 CHAR) DEFAULT on null user NOT NULL,
-  updated_timestamp   TIMESTAMP(6),
-  updated_user        VARCHAR2(255 CHAR)
-)
-ORGANIZATION INDEX 
-NOLOGGING 
-INCLUDING parameter_value
-OVERFLOW 
-STORAGE 
-( 
-  BUFFER_POOL KEEP 
-)
-;
+CREATE TABLE AD_SYNC_OWNER.AD_SYNC_PARAMETERS (
+  PARAMETER_NAME VARCHAR2(100 CHAR) PRIMARY KEY,
+  PARAMETER_VALUE VARCHAR2(200 CHAR),
+  DESCRIPTION VARCHAR2(4000 CHAR),
+  CREATED_TIMESTAMP TIMESTAMP(6) DEFAULT ON NULL SYSTIMESTAMP NOT NULL,
+  CREATED_USER VARCHAR2(255 CHAR) DEFAULT ON NULL USER NOT NULL,
+  UPDATED_TIMESTAMP TIMESTAMP(6),
+  UPDATED_USER VARCHAR2(255 CHAR)
+) ORGANIZATION INDEX NOLOGGING INCLUDING PARAMETER_VALUE OVERFLOW STORAGE (
+  BUFFER_POOL KEEP
+);
 
-insert into ad_sync_owner.AD_SYNC_PARAMETERS (parameter_name, parameter_value, description) values ('LOG_WARNING','1','');
-insert into ad_sync_owner.AD_SYNC_PARAMETERS (parameter_name, parameter_value, description) values ('LOG_INFO','1','');
-insert into ad_sync_owner.AD_SYNC_PARAMETERS (parameter_name, parameter_value, description) values ('STORE_USER_PASSWORD_IN_FILE','1','1 means yes');
-insert into ad_sync_owner.AD_SYNC_PARAMETERS (parameter_name, parameter_value, description) values ('STORE_USER_PASSWORD_IN_FILE_DIRECTORY','&user_pass_directory_name.','directory object name');
-insert into ad_sync_owner.AD_SYNC_PARAMETERS (parameter_name, parameter_value, description) values ('STORE_USER_PASSWORD_IN_TABLE','1','1 means yes');
-insert into ad_sync_owner.AD_SYNC_PARAMETERS (parameter_name, parameter_value, description) values ('USER_ACCOUNT_LOCK_STATUS','unlock','unlock or lock');
-insert into ad_sync_owner.AD_SYNC_PARAMETERS (parameter_name, parameter_value, description) values ('USER_TABLESPACE','users','');
-insert into ad_sync_owner.AD_SYNC_PARAMETERS (parameter_name, parameter_value, description) values ('USER_TEMP_TABLESPACE','temp','');
-insert into ad_sync_owner.AD_SYNC_PARAMETERS (parameter_name, parameter_value, description) values ('USERNAME_PREFIX','&username_prefix.','');
-insert into ad_sync_owner.AD_SYNC_PARAMETERS (parameter_name, parameter_value, description) values ('GROUPNAME_PREFIX','&groupname_prefix.','');
-insert into ad_sync_owner.AD_SYNC_PARAMETERS (parameter_name, parameter_value, description) values ('SYNC_USERS_LOCK_INSTEAD_OF_DROP','1','1 means yes');
-insert into ad_sync_owner.AD_SYNC_PARAMETERS (parameter_name, parameter_value, description) values ('SYNC_USERS_PROCESS_DROP','1','1 means yes');
-insert into ad_sync_owner.AD_SYNC_PARAMETERS (parameter_name, parameter_value, description) values ('SYNC_GROUPS_PROCESS_DROP','1','1 means yes');
-insert into ad_sync_owner.AD_SYNC_PARAMETERS (parameter_name, parameter_value, description) values ('SYNC_GROUP_MEMBERS_PROCESS_DROP','1','1 means yes');
+INSERT INTO AD_SYNC_OWNER.AD_SYNC_PARAMETERS (
+  PARAMETER_NAME,
+  PARAMETER_VALUE,
+  DESCRIPTION
+) VALUES (
+  'LOG_WARNING',
+  '1',
+  ''
+);
 
-commit;
+INSERT INTO AD_SYNC_OWNER.AD_SYNC_PARAMETERS (
+  PARAMETER_NAME,
+  PARAMETER_VALUE,
+  DESCRIPTION
+) VALUES (
+  'LOG_INFO',
+  '1',
+  ''
+);
+
+INSERT INTO AD_SYNC_OWNER.AD_SYNC_PARAMETERS (
+  PARAMETER_NAME,
+  PARAMETER_VALUE,
+  DESCRIPTION
+) VALUES (
+  'STORE_USER_PASSWORD_IN_FILE',
+  '1',
+  '1 means yes'
+);
+
+INSERT INTO AD_SYNC_OWNER.AD_SYNC_PARAMETERS (
+  PARAMETER_NAME,
+  PARAMETER_VALUE,
+  DESCRIPTION
+) VALUES (
+  'STORE_USER_PASSWORD_IN_FILE_DIRECTORY',
+  '&user_pass_directory_name.',
+  'directory object name'
+);
+
+INSERT INTO AD_SYNC_OWNER.AD_SYNC_PARAMETERS (
+  PARAMETER_NAME,
+  PARAMETER_VALUE,
+  DESCRIPTION
+) VALUES (
+  'STORE_USER_PASSWORD_IN_TABLE',
+  '1',
+  '1 means yes'
+);
+
+INSERT INTO AD_SYNC_OWNER.AD_SYNC_PARAMETERS (
+  PARAMETER_NAME,
+  PARAMETER_VALUE,
+  DESCRIPTION
+) VALUES (
+  'USER_ACCOUNT_LOCK_STATUS',
+  'unlock',
+  'unlock or lock'
+);
+
+INSERT INTO AD_SYNC_OWNER.AD_SYNC_PARAMETERS (
+  PARAMETER_NAME,
+  PARAMETER_VALUE,
+  DESCRIPTION
+) VALUES (
+  'USER_TABLESPACE',
+  'users',
+  ''
+);
+
+INSERT INTO AD_SYNC_OWNER.AD_SYNC_PARAMETERS (
+  PARAMETER_NAME,
+  PARAMETER_VALUE,
+  DESCRIPTION
+) VALUES (
+  'USER_TEMP_TABLESPACE',
+  'temp',
+  ''
+);
+
+INSERT INTO AD_SYNC_OWNER.AD_SYNC_PARAMETERS (
+  PARAMETER_NAME,
+  PARAMETER_VALUE,
+  DESCRIPTION
+) VALUES (
+  'USERNAME_PREFIX',
+  '&username_prefix.',
+  ''
+);
+
+INSERT INTO AD_SYNC_OWNER.AD_SYNC_PARAMETERS (
+  PARAMETER_NAME,
+  PARAMETER_VALUE,
+  DESCRIPTION
+) VALUES (
+  'GROUPNAME_PREFIX',
+  '&groupname_prefix.',
+  ''
+);
+
+INSERT INTO AD_SYNC_OWNER.AD_SYNC_PARAMETERS (
+  PARAMETER_NAME,
+  PARAMETER_VALUE,
+  DESCRIPTION
+) VALUES (
+  'SYNC_USERS_LOCK_INSTEAD_OF_DROP',
+  '1',
+  '1 means yes'
+);
+
+INSERT INTO AD_SYNC_OWNER.AD_SYNC_PARAMETERS (
+  PARAMETER_NAME,
+  PARAMETER_VALUE,
+  DESCRIPTION
+) VALUES (
+  'SYNC_USERS_PROCESS_DROP',
+  '1',
+  '1 means yes'
+);
+
+INSERT INTO AD_SYNC_OWNER.AD_SYNC_PARAMETERS (
+  PARAMETER_NAME,
+  PARAMETER_VALUE,
+  DESCRIPTION
+) VALUES (
+  'SYNC_GROUPS_PROCESS_DROP',
+  '1',
+  '1 means yes'
+);
+
+INSERT INTO AD_SYNC_OWNER.AD_SYNC_PARAMETERS (
+  PARAMETER_NAME,
+  PARAMETER_VALUE,
+  DESCRIPTION
+) VALUES (
+  'SYNC_GROUP_MEMBERS_PROCESS_DROP',
+  '1',
+  '1 means yes'
+);
+
+COMMIT;

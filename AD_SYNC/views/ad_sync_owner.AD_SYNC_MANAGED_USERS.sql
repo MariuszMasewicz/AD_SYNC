@@ -1,8 +1,12 @@
 prompt CREATE OR REPLACE VIEW ad_sync_owner.AD_SYNC_MANAGED_USERS
 
-CREATE OR REPLACE VIEW ad_sync_owner.AD_SYNC_MANAGED_USERS
-as
-select * 
-from sys.dba_users 
-where username like ad_sync_owner.ad_sync_tools.get_param_value('USERNAME_PREFIX')||'%' 
-order by username;
+CREATE OR REPLACE VIEW AD_SYNC_OWNER.AD_SYNC_MANAGED_USERS AS
+    SELECT
+        *
+    FROM
+        SYS.DBA_USERS
+    WHERE
+        USERNAME LIKE AD_SYNC_OWNER.AD_SYNC_TOOLS.GET_PARAM_VALUE('USERNAME_PREFIX')
+                                                  ||'%'
+    ORDER BY
+        USERNAME;

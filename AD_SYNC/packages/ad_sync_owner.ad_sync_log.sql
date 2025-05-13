@@ -1,149 +1,159 @@
 prompt CREATE OR REPLACE PACKAGE ad_sync_owner.ad_sync_log
 
-CREATE OR REPLACE PACKAGE ad_sync_owner.ad_sync_log AS
-  PROCEDURE write_error(p_src        IN VARCHAR2,
-                        p_code       IN PLS_INTEGER,
-                        p_msg        IN VARCHAR2,
-                        p_process_run_id in PLS_INTEGER default null);
+CREATE OR REPLACE PACKAGE AD_SYNC_OWNER.AD_SYNC_LOG AS
 
-  PROCEDURE write_warning(p_src        IN VARCHAR2,
-                          p_code       IN PLS_INTEGER,
-                          p_msg        IN VARCHAR2,
-                          p_process_run_id in PLS_INTEGER default null);
+  PROCEDURE WRITE_ERROR(
+    P_SRC IN VARCHAR2,
+    P_CODE IN PLS_INTEGER,
+    P_MSG IN VARCHAR2,
+    P_PROCESS_RUN_ID IN PLS_INTEGER DEFAULT NULL
+  );
 
-  PROCEDURE write_info(p_src        IN VARCHAR2,
-                       p_code       IN PLS_INTEGER,
-                       p_msg        IN VARCHAR2,
-                       p_process_run_id in PLS_INTEGER default null);
-END ad_sync_log;
+  PROCEDURE WRITE_WARNING(
+    P_SRC IN VARCHAR2,
+    P_CODE IN PLS_INTEGER,
+    P_MSG IN VARCHAR2,
+    P_PROCESS_RUN_ID IN PLS_INTEGER DEFAULT NULL
+  );
+
+  PROCEDURE WRITE_INFO(
+    P_SRC IN VARCHAR2,
+    P_CODE IN PLS_INTEGER,
+    P_MSG IN VARCHAR2,
+    P_PROCESS_RUN_ID IN PLS_INTEGER DEFAULT NULL
+  );
+END AD_SYNC_LOG;
 /
 
-CREATE OR REPLACE PACKAGE BODY ad_sync_owner.ad_sync_log IS
+CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_LOG IS
 
-  PROCEDURE write_error(p_src        IN VARCHAR2,
-                        p_code       IN PLS_INTEGER,
-                        p_msg        IN VARCHAR2,
-                        p_process_run_id in PLS_INTEGER default null) IS
+  PROCEDURE WRITE_ERROR(
+    P_SRC IN VARCHAR2,
+    P_CODE IN PLS_INTEGER,
+    P_MSG IN VARCHAR2,
+    P_PROCESS_RUN_ID IN PLS_INTEGER DEFAULT NULL
+  ) IS
     PRAGMA AUTONOMOUS_TRANSACTION;
-  v_systimestamp CONSTANT TIMESTAMP WITH TIME ZONE := systimestamp;
+    V_SYSTIMESTAMP CONSTANT TIMESTAMP WITH TIME ZONE := SYSTIMESTAMP;
   BEGIN
-  
-    INSERT INTO ad_sync_owner.AD_SYNC_LOG_TABLE
-      (log_id,
-       process_run_id,
-       log_type,
-       log_src,
-       log_code,
-       log_msg,
-       log_timestamp,
-       created_timestamp,
-       created_user,
-       updated_timestamp,
-       updated_user)
-    VALUES
-      (ad_sync_owner.AD_SYNC_LOG_TABLE_seq.nextval,
-       p_process_run_id,
-       0,
-       substr(p_src, 1, 4000),
-       p_code,
-       CASE WHEN p_msg IS NOT NULL THEN
-       substr(p_msg || chr(10) || 'Error backtrace  :' || chr(10) ||
-              dbms_utility.format_error_backtrace,
-              1,
-              4000) ELSE 'NO MESSAGE' END,
-       v_systimestamp,
-       v_systimestamp,
-       USER,
-       v_systimestamp,
-       USER);
-  
+    INSERT INTO AD_SYNC_OWNER.AD_SYNC_LOG_TABLE (
+      LOG_ID,
+      PROCESS_RUN_ID,
+      LOG_TYPE,
+      LOG_SRC,
+      LOG_CODE,
+      LOG_MSG,
+      LOG_TIMESTAMP,
+      CREATED_TIMESTAMP,
+      CREATED_USER,
+      UPDATED_TIMESTAMP,
+      UPDATED_USER
+    ) VALUES (
+      AD_SYNC_OWNER.AD_SYNC_LOG_TABLE_SEQ.NEXTVAL,
+      P_PROCESS_RUN_ID,
+      0,
+      SUBSTR(P_SRC, 1, 4000),
+      P_CODE,
+      CASE WHEN P_MSG IS NOT NULL THEN SUBSTR(P_MSG
+                                              || CHR(10)
+                                              || 'Error backtrace  :'
+                                              || CHR(10)
+                                              || DBMS_UTILITY.FORMAT_ERROR_BACKTRACE, 1, 4000) ELSE 'NO MESSAGE' END,
+      V_SYSTIMESTAMP,
+      V_SYSTIMESTAMP,
+      USER,
+      V_SYSTIMESTAMP,
+      USER
+    );
     COMMIT WRITE NOWAIT;
-  END write_error;
+  END WRITE_ERROR;
+ 
 
   -----------------------------------------------------------------------------
-
-  PROCEDURE write_warning(p_src        IN VARCHAR2,
-                          p_code       IN PLS_INTEGER,
-                          p_msg        IN VARCHAR2,
-                          p_process_run_id in PLS_INTEGER default null) IS
+  PROCEDURE WRITE_WARNING(
+    P_SRC IN VARCHAR2,
+    P_CODE IN PLS_INTEGER,
+    P_MSG IN VARCHAR2,
+    P_PROCESS_RUN_ID IN PLS_INTEGER DEFAULT NULL
+  ) IS
     PRAGMA AUTONOMOUS_TRANSACTION;
-  v_systimestamp CONSTANT TIMESTAMP WITH TIME ZONE := systimestamp;
+    V_SYSTIMESTAMP CONSTANT TIMESTAMP WITH TIME ZONE := SYSTIMESTAMP;
   BEGIN
-  
-    INSERT INTO ad_sync_owner.AD_SYNC_LOG_TABLE
-      (log_id,
-       process_run_id,
-       log_type,
-       log_src,
-       log_code,
-       log_msg,
-       log_timestamp,
-       created_timestamp,
-       created_user,
-       updated_timestamp,
-       updated_user)
-    VALUES
-      (ad_sync_owner.AD_SYNC_LOG_TABLE_seq.nextval,
-       p_process_run_id,
-       1,
-       substr(p_src, 1, 4000),
-       p_code,
-       CASE WHEN p_msg IS NOT NULL THEN
-       substr(p_msg || chr(10) || 'Error backtrace :' || chr(10) ||
-              dbms_utility.format_error_backtrace,
-              1,
-              4000) ELSE 'NO MESSAGE' END,
-       v_systimestamp,
-       v_systimestamp,
-       USER,
-       v_systimestamp,
-       USER);
-  
+    INSERT INTO AD_SYNC_OWNER.AD_SYNC_LOG_TABLE (
+      LOG_ID,
+      PROCESS_RUN_ID,
+      LOG_TYPE,
+      LOG_SRC,
+      LOG_CODE,
+      LOG_MSG,
+      LOG_TIMESTAMP,
+      CREATED_TIMESTAMP,
+      CREATED_USER,
+      UPDATED_TIMESTAMP,
+      UPDATED_USER
+    ) VALUES (
+      AD_SYNC_OWNER.AD_SYNC_LOG_TABLE_SEQ.NEXTVAL,
+      P_PROCESS_RUN_ID,
+      1,
+      SUBSTR(P_SRC, 1, 4000),
+      P_CODE,
+      CASE WHEN P_MSG IS NOT NULL THEN SUBSTR(P_MSG
+                                              || CHR(10)
+                                              || 'Error backtrace :'
+                                              || CHR(10)
+                                              || DBMS_UTILITY.FORMAT_ERROR_BACKTRACE, 1, 4000) ELSE 'NO MESSAGE' END,
+      V_SYSTIMESTAMP,
+      V_SYSTIMESTAMP,
+      USER,
+      V_SYSTIMESTAMP,
+      USER
+    );
     COMMIT WRITE NOWAIT;
-  END write_warning;
+  END WRITE_WARNING;
+ 
 
   -----------------------------------------------------------------------------
-
-  PROCEDURE write_info(p_src        IN VARCHAR2,
-                       p_code       IN PLS_INTEGER,
-                       p_msg        IN VARCHAR2,
-                       p_process_run_id in PLS_INTEGER default null) IS
+  PROCEDURE WRITE_INFO(
+    P_SRC IN VARCHAR2,
+    P_CODE IN PLS_INTEGER,
+    P_MSG IN VARCHAR2,
+    P_PROCESS_RUN_ID IN PLS_INTEGER DEFAULT NULL
+  ) IS
     PRAGMA AUTONOMOUS_TRANSACTION;
-  v_systimestamp CONSTANT TIMESTAMP WITH TIME ZONE := systimestamp;
+    V_SYSTIMESTAMP CONSTANT TIMESTAMP WITH TIME ZONE := SYSTIMESTAMP;
   BEGIN
-    IF (ad_sync_owner.ad_sync_tools.get_param_value('LOG_INFO') = 1) THEN
-      INSERT INTO ad_sync_owner.AD_SYNC_LOG_TABLE
-        (log_id,
-         process_run_id,
-         log_type,
-         log_src,
-         log_code,
-         log_msg,
-         log_timestamp,
-         created_timestamp,
-         created_user,
-         updated_timestamp,
-         updated_user)
-      VALUES
-        (ad_sync_owner.AD_SYNC_LOG_TABLE_seq.nextval,
-         p_process_run_id,
-         2,
-         substr(p_src, 1, 4000),
-         p_code,
-         CASE WHEN p_msg IS NOT NULL THEN
-         substr(p_msg || chr(10) || 'Error backtrace  :' || chr(10) ||
-                dbms_utility.format_error_backtrace,
-                1,
-                4000) ELSE 'NO MESSAGE' END,
-         v_systimestamp,
-         v_systimestamp,
-         USER,
-         v_systimestamp,
-         USER);
-    
+    IF (AD_SYNC_OWNER.AD_SYNC_TOOLS.GET_PARAM_VALUE('LOG_INFO') = 1) THEN
+      INSERT INTO AD_SYNC_OWNER.AD_SYNC_LOG_TABLE (
+        LOG_ID,
+        PROCESS_RUN_ID,
+        LOG_TYPE,
+        LOG_SRC,
+        LOG_CODE,
+        LOG_MSG,
+        LOG_TIMESTAMP,
+        CREATED_TIMESTAMP,
+        CREATED_USER,
+        UPDATED_TIMESTAMP,
+        UPDATED_USER
+      ) VALUES (
+        AD_SYNC_OWNER.AD_SYNC_LOG_TABLE_SEQ.NEXTVAL,
+        P_PROCESS_RUN_ID,
+        2,
+        SUBSTR(P_SRC, 1, 4000),
+        P_CODE,
+        CASE WHEN P_MSG IS NOT NULL THEN SUBSTR(P_MSG
+                                                || CHR(10)
+                                                || 'Error backtrace  :'
+                                                || CHR(10)
+                                                || DBMS_UTILITY.FORMAT_ERROR_BACKTRACE, 1, 4000) ELSE 'NO MESSAGE' END,
+        V_SYSTIMESTAMP,
+        V_SYSTIMESTAMP,
+        USER,
+        V_SYSTIMESTAMP,
+        USER
+      );
       COMMIT WRITE NOWAIT;
     END IF;
-  END write_info;
-
-END ad_sync_log;
+  END WRITE_INFO;
+END AD_SYNC_LOG;
 /

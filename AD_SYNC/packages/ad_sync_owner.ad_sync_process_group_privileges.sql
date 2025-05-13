@@ -1,4 +1,4 @@
-prompt CREATE OR REPLACE PACKAGE ad_sync_owner.ad_sync_owner.ad_sync_process_group_privileges
+prompt CREATE OR REPLACE PACKAGE ad_sync_owner.ad_sync_process_group_privileges
 
 CREATE OR REPLACE PACKAGE AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUP_PRIVILEGES
     AUTHID CURRENT_USER AS
@@ -13,7 +13,7 @@ CREATE OR REPLACE PACKAGE AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUP_PRIVILEGES
 END AD_SYNC_PROCESS_GROUP_PRIVILEGES;
 /
 
-prompt CREATE OR REPLACE PACKAGE BODY ad_sync_owner.ad_sync_owner.ad_sync_process_group_privileges
+prompt CREATE OR REPLACE PACKAGE BODY ad_sync_owner.ad_sync_process_group_privileges
 
 CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUP_PRIVILEGES AS
 
