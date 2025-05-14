@@ -1,9 +1,12 @@
 {
     "sqldeveloper.format.general.identifierCase": "UPPER",
     "sqldeveloper.format.general.keywordCase": "UPPER",
+    "sqldeveloper.format.indentation.identSpaces": 2,
+    "sqldeveloper.format.lineBreaks.onComma": "Before",
+    "sqldeveloper.database.nls.dateFormat": "DD/MM/RR HH24:MI:SS",
+    "sqldeveloper.database.nls.timestampFormat": "DD/MM/RR HH24:MI:SSXFF",
+    "sqldeveloper.database.nls.timestampTZ Format": "DD/MM/RR HH24:MI:SSXFF TZR",
     "sqldeveloper.format.alignment": {
         "assignmentOperator": true
-    },
-    "sqldeveloper.format.indentation.identSpaces": 2,
-    "sqldeveloper.format.lineBreaks.onComma": "Before"
+    }
 }

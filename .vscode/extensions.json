@@ -1,0 +1,14 @@
+{
+    "recommendations": [
+        "oracle.sql-developer",
+        "mechatroner.rainbow-csv",
+        "grisselbav.plsql-unwrapper",
+        "ms-ceintl.vscode-language-pack-pl",
+        "undertree.ut-code-sql",
+        "ms-vscode.powershell",
+        "github.copilot",
+        "github.copilot-chat",
+        "eamodio.gitlens",
+        "vscode-icons-team.vscode-icons"
+    ]
+}
