@@ -1,8 +1,8 @@
 BEGIN
-  DBMS_SCHEDULER.CREATE_JOB (
-    JOB_NAME => '"AD_SYNC_OWNER"."AD_SYNC_PROCESS_LOAD"',
-    JOB_TYPE => 'PLSQL_BLOCK',
-    JOB_ACTION => 'declare
+  DBMS_SCHEDULER.CREATE_JOB(
+    JOB_NAME            => '"AD_SYNC_OWNER"."AD_SYNC_PROCESS_LOAD"'
+   ,JOB_TYPE            => 'PLSQL_BLOCK'
+   ,JOB_ACTION          => 'declare
 v_start_timestamp timestamp;
 v_end_timestamp timestamp;
 v_load_id number;
@@ -30,24 +30,24 @@ ad_sync_owner.ad_sync_process_groups.mark_existing_groups (v_start_timestamp,  v
 ad_sync_owner.ad_sync_process_group_members.add_group_members (v_start_timestamp,  v_end_timestamp ,v_process_run, v_load_id);
 
 end;
-',
-    NUMBER_OF_ARGUMENTS => 0,
-    START_DATE => NULL,
-    REPEAT_INTERVAL => 'FREQ=HOURLY;BYTIME=2000',
-    END_DATE => NULL,
-    ENABLED => FALSE,
-    AUTO_DROP => FALSE,
-    COMMENTS => ''
+'
+   ,NUMBER_OF_ARGUMENTS => 0
+   ,START_DATE          => NULL
+   ,REPEAT_INTERVAL     => 'FREQ=HOURLY;BYTIME=2000'
+   ,END_DATE            => NULL
+   ,ENABLED             => FALSE
+   ,AUTO_DROP           => FALSE
+   ,COMMENTS            => ''
   );
   DBMS_SCHEDULER.SET_ATTRIBUTE(
-    NAME => '"AD_SYNC_OWNER"."AD_SYNC_PROCESS_LOAD"',
-    ATTRIBUTE => 'store_output',
-    VALUE => TRUE
+    NAME      => '"AD_SYNC_OWNER"."AD_SYNC_PROCESS_LOAD"'
+   ,ATTRIBUTE => 'store_output'
+   ,VALUE     => TRUE
   );
   DBMS_SCHEDULER.SET_ATTRIBUTE(
-    NAME => '"AD_SYNC_OWNER"."AD_SYNC_PROCESS_LOAD"',
-    ATTRIBUTE => 'logging_level',
-    VALUE => DBMS_SCHEDULER.LOGGING_OFF
+    NAME      => '"AD_SYNC_OWNER"."AD_SYNC_PROCESS_LOAD"'
+   ,ATTRIBUTE => 'logging_level'
+   ,VALUE     => DBMS_SCHEDULER.LOGGING_OFF
   );
  
   --DBMS_SCHEDULER.enable(name => '"AD_SYNC_OWNER"."AD_SYNC_PROCESS_LOAD"');

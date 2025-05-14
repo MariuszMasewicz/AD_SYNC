@@ -1,4 +1,4 @@
-set serveroutput on;
+   set serveroutput on;
 
 --version 1
 exec ad_sync_owner.ad_sync_load.init_load(p_LOAD_TYPE => 'R'); 
@@ -31,7 +31,7 @@ exec ad_sync_owner.ad_sync_load.add_group_to_load ('','C');
 exec ad_sync_owner.ad_sync_load.add_group_to_load ('ad_test_group2','C');
 exec ad_sync_owner.ad_sync_load.add_group_to_load ('ad_test_group3','C');
 exec ad_sync_owner.ad_sync_load.add_group_to_load ('ad_test_group4','C');
-exec ad_sync_owner.ad_sync_load.add_group_member_to_load ('ad_test_group1', 'ad_test_user1'),'C';
+exec ad_sync_owner.ad_sync_load.add_group_member_to_load ('ad_test_group1', 'ad_test_user1','C');
 exec ad_sync_owner.ad_sync_load.add_group_member_to_load ('ad_test_group1', 'ad_test_user2','C');
 exec ad_sync_owner.ad_sync_load.add_group_member_to_load ('ad_test_group1', 'ad_test_user1','C');
 exec ad_sync_owner.ad_sync_load.add_group_member_to_load ('ad_test_group1', 'ad_test_user2','C');

@@ -1,12 +1,15 @@
-set serveroutput on
-declare 
-v_stmt varchar2(4000);
-begin
-for i in (select * from dba_roles where role like '&groupname_prefix.'||'%')
-loop
-  v_stmt := 'drop role '||i.role;
-  dbms_output.put_line(v_stmt);
-  execute immediate v_stmt;
-end loop;
-end;
+   set serveroutput on
+DECLARE
+  V_STMT VARCHAR2(4000);
+BEGIN
+  FOR I IN (
+    SELECT *
+      FROM DBA_ROLES
+     WHERE ROLE LIKE '&groupname_prefix.' || '%'
+  ) LOOP
+    V_STMT := 'drop role ' || I.ROLE;
+    DBMS_OUTPUT.PUT_LINE(V_STMT);
+    EXECUTE IMMEDIATE V_STMT;
+  END LOOP;
+END;
 /

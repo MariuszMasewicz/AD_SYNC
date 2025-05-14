@@ -1,31 +1,86 @@
-set serveroutput on;
+   set serveroutput on;
 
-declare
-v_start_timestamp timestamp;
-v_end_timestamp timestamp;
-v_load_id number;
-v_process_run number := ad_sync_owner.AD_SYNC_PROCESS_RUN_seq.nextval;
-begin
-select  created_timestamp, load_id 
-  into v_start_timestamp, v_load_id 
-  from ad_sync_owner.AD_SYNC_HISTORY 
-  where sync_status=2 
-    and created_timestamp = (select  max(created_timestamp)from ad_sync_owner.AD_SYNC_HISTORY where sync_status=2);
-select  max(created_timestamp) 
-  into v_end_timestamp from ad_sync_owner.AD_SYNC_HISTORY 
-  where sync_status=3;
-ad_sync_owner.ad_sync_process_users.mark_existing_users (v_start_timestamp,  v_end_timestamp ,v_process_run, v_load_id);
-ad_sync_owner.ad_sync_process_users.add_users (v_start_timestamp,  v_end_timestamp , v_process_run, v_load_id);
-ad_sync_owner.ad_sync_process_users.lock_users (v_start_timestamp,  v_end_timestamp ,v_process_run, v_load_id);
-ad_sync_owner.ad_sync_process_users.unlock_users (v_start_timestamp,  v_end_timestamp ,v_process_run, v_load_id);
-ad_sync_owner.ad_sync_process_users.change_password (v_start_timestamp,  v_end_timestamp ,v_process_run, v_load_id);
-ad_sync_owner.ad_sync_process_users.expire_password (v_start_timestamp,  v_end_timestamp ,v_process_run, v_load_id);
-ad_sync_owner.ad_sync_process_users.drop_users (v_start_timestamp,  v_end_timestamp ,v_process_run, v_load_id);
-
-ad_sync_owner.ad_sync_process_groups.add_groups (v_start_timestamp,  v_end_timestamp ,v_process_run, v_load_id);
-ad_sync_owner.ad_sync_process_groups.mark_existing_groups (v_start_timestamp,  v_end_timestamp ,v_process_run, v_load_id);
-
-ad_sync_owner.ad_sync_process_group_members.add_group_members (v_start_timestamp,  v_end_timestamp ,v_process_run, v_load_id);
-
-end;
+DECLARE
+  V_START_TIMESTAMP TIMESTAMP;
+  V_END_TIMESTAMP   TIMESTAMP;
+  V_LOAD_ID         NUMBER;
+  V_PROCESS_RUN     NUMBER := AD_SYNC_OWNER.AD_SYNC_PROCESS_RUN_SEQ.NEXTVAL;
+BEGIN
+  SELECT CREATED_TIMESTAMP
+        ,LOAD_ID
+    INTO
+    V_START_TIMESTAMP
+  ,V_LOAD_ID
+    FROM AD_SYNC_OWNER.AD_SYNC_HISTORY
+   WHERE SYNC_STATUS = 2
+     AND CREATED_TIMESTAMP = (
+    SELECT MAX(CREATED_TIMESTAMP)
+      FROM AD_SYNC_OWNER.AD_SYNC_HISTORY
+     WHERE SYNC_STATUS = 2
+  );
+  SELECT MAX(CREATED_TIMESTAMP)
+    INTO V_END_TIMESTAMP
+    FROM AD_SYNC_OWNER.AD_SYNC_HISTORY
+   WHERE SYNC_STATUS = 3;
+  AD_SYNC_OWNER.AD_SYNC_PROCESS_USERS.MARK_EXISTING_USERS(
+    V_START_TIMESTAMP
+   ,V_END_TIMESTAMP
+   ,V_PROCESS_RUN
+   ,V_LOAD_ID
+  );
+  AD_SYNC_OWNER.AD_SYNC_PROCESS_USERS.ADD_USERS(
+    V_START_TIMESTAMP
+   ,V_END_TIMESTAMP
+   ,V_PROCESS_RUN
+   ,V_LOAD_ID
+  );
+  AD_SYNC_OWNER.AD_SYNC_PROCESS_USERS.LOCK_USERS(
+    V_START_TIMESTAMP
+   ,V_END_TIMESTAMP
+   ,V_PROCESS_RUN
+   ,V_LOAD_ID
+  );
+  AD_SYNC_OWNER.AD_SYNC_PROCESS_USERS.UNLOCK_USERS(
+    V_START_TIMESTAMP
+   ,V_END_TIMESTAMP
+   ,V_PROCESS_RUN
+   ,V_LOAD_ID
+  );
+  AD_SYNC_OWNER.AD_SYNC_PROCESS_USERS.CHANGE_PASSWORD(
+    V_START_TIMESTAMP
+   ,V_END_TIMESTAMP
+   ,V_PROCESS_RUN
+   ,V_LOAD_ID
+  );
+  AD_SYNC_OWNER.AD_SYNC_PROCESS_USERS.EXPIRE_PASSWORD(
+    V_START_TIMESTAMP
+   ,V_END_TIMESTAMP
+   ,V_PROCESS_RUN
+   ,V_LOAD_ID
+  );
+  AD_SYNC_OWNER.AD_SYNC_PROCESS_USERS.DROP_USERS(
+    V_START_TIMESTAMP
+   ,V_END_TIMESTAMP
+   ,V_PROCESS_RUN
+   ,V_LOAD_ID
+  );
+  AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUPS.ADD_GROUPS(
+    V_START_TIMESTAMP
+   ,V_END_TIMESTAMP
+   ,V_PROCESS_RUN
+   ,V_LOAD_ID
+  );
+  AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUPS.MARK_EXISTING_GROUPS(
+    V_START_TIMESTAMP
+   ,V_END_TIMESTAMP
+   ,V_PROCESS_RUN
+   ,V_LOAD_ID
+  );
+  AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUP_MEMBERS.ADD_GROUP_MEMBERS(
+    V_START_TIMESTAMP
+   ,V_END_TIMESTAMP
+   ,V_PROCESS_RUN
+   ,V_LOAD_ID
+  );
+END;
 /

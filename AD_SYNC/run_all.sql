@@ -1,4 +1,4 @@
-set serveroutput on
+   set serveroutput on
 set echo on 
 
 /**** values used as initial values for table ad_sync_owner.AD_SYNC_PARAMETERS */
@@ -60,4 +60,3 @@ DEFINE ad_sync_interface_tablespace = ad_sync
 @scripts/invalid_objects_check.sql
 
 @users/ad_sync_interface_grants.sql
-             

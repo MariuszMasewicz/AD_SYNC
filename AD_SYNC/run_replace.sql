@@ -1,4 +1,4 @@
-set serveroutput on
+   set serveroutput on
 set echo on 
 
 @views/ad_sync_owner.AD_SYNC_MANAGED_USERS.sql

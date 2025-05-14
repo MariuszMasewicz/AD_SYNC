@@ -1,0 +1,9 @@
+{
+    "sqldeveloper.format.general.identifierCase": "UPPER",
+    "sqldeveloper.format.general.keywordCase": "UPPER",
+    "sqldeveloper.format.alignment": {
+        "assignmentOperator": true
+    },
+    "sqldeveloper.format.indentation.identSpaces": 2,
+    "sqldeveloper.format.lineBreaks.onComma": "Before"
+}
