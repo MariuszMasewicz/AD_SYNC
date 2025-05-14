@@ -1,3 +1,7 @@
 prompt Create tablespace
 
---CREATE TABLESPACE ad_sync DATAFILE '/u02/oradata/ORCL/datafile/AD_SYNC_01.dbf' SIZE 1048576 AUTOEXTEND ON NEXT 1048576 MAXSIZE UNLIMITED;
+/*
+create tablespace ad_sync
+   datafile '/u02/oradata/ORCL/datafile/AD_SYNC_01.dbf' size 1048576
+   autoextend on next 1048576 maxsize unlimited;
+*/

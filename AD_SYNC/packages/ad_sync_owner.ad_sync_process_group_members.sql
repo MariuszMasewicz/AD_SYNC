@@ -3,15 +3,15 @@ prompt CREATE OR REPLACE PACKAGE  ad_sync_owner.ad_sync_process_group_members
 CREATE OR REPLACE PACKAGE  ad_sync_owner.ad_sync_process_group_members AUTHID current_user AS
     PROCEDURE add_group_members (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
     --PROCEDURE drop_group_members_not_exist_in_load (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
-    --PROCEDURE drop_group_member_on_demand (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
-    --PROCEDURE mark_existing_group_members (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
+    PROCEDURE drop_group_member_on_demand (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
+    PROCEDURE mark_existing_group_members (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number);
 END ad_sync_process_group_members;
 /
 
 prompt CREATE OR REPLACE PACKAGE BODY ad_sync_owner.ad_sync_process_group_members
 CREATE OR REPLACE PACKAGE BODY ad_sync_owner.ad_sync_process_group_members AS
 
-/*PROCEDURE drop_group_members_not_exist_in_loads_not_exist_in_load (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number) as
+/*PROCEDURE drop_group_members_not_exist_in_load (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number) as
         v_stmt VARCHAR2(4000);
     BEGIN
         if p_process_run is not null then
@@ -63,7 +63,7 @@ CREATE OR REPLACE PACKAGE BODY ad_sync_owner.ad_sync_process_group_members AS
     
     END drop_group_members_not_exist_in_load;
 */
-/*
+
 PROCEDURE drop_group_member_on_demand (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number) as
         v_stmt VARCHAR2(4000);
     BEGIN
@@ -75,17 +75,18 @@ PROCEDURE drop_group_member_on_demand (p_start_timestamp timestamp, p_end_timest
                             p_process_run);
         FOR i IN (
             SELECT
-                ag.id, au.GROUPname
+                ag.id, ag.GROUPname, ag.member
             FROM
-                ad_sync_owner.ad_sync_group_members ag join ad_sync_owner.AD_SYNC_MANAGED_group_members g on (ag.GROUPname=g.GROUPname)
+                ad_sync_owner.ad_sync_group_members ag join ad_sync_owner.AD_SYNC_MANAGED_group_members g on (ag.GROUPname=g.GROUPname and ag.member=g.GRANTEE)
             WHERE
                 ag.status = 1
                 and ag.REQUESTED_OPERATION = 'D' --requested drop GROUP
                 and ag.GROUPname like ad_sync_owner.ad_sync_tools.get_param_value('GROUPNAME_PREFIX')||'%'
+                and ag.member like ad_sync_owner.ad_sync_tools.get_param_value('USERNAME_PREFIX')||'%'
                 and ag.CREATED_TIMESTAMP between p_start_timestamp and p_end_timestamp
                 )
          LOOP
-            v_stmt := 'drop role ' || i.GROUPname 
+            v_stmt := 'revoke ' || i.GROUPname || ' from ' || i.member
                    --|| ' cascade'
                    ;
             dbms_output.put_line(v_stmt||';');
@@ -135,14 +136,15 @@ PROCEDURE drop_group_member_on_demand (p_start_timestamp timestamp, p_end_timest
       -- existing group_members
       UPDATE ad_sync_owner.AD_SYNC_group_members
             SET
-                status = 38 -- GROUP exists in database
+                status = 48 -- GROUP exists in database
                 , PROCESS_TIMESTAMP = current_timestamp
                 , load_id=p_load_id
             WHERE
-                groupname in (select groupname from ad_sync_owner.AD_SYNC_MANAGED_group_members)
+                (groupname,member) in (select groupname,GRANTEE from ad_sync_owner.AD_SYNC_MANAGED_group_members)
                 and status = 1
                 and REQUESTED_OPERATION = 'C' --requested create GROUP
                 and groupname like ad_sync_owner.ad_sync_tools.get_param_value('GROUPNAME_PREFIX')||'%'
+                and member  like ad_sync_owner.ad_sync_tools.get_param_value('USERNAME_PREFIX')||'%'
                 and CREATED_TIMESTAMP between p_start_timestamp and p_end_timestamp;
             v_number_of_existing := SQL%ROWCOUNT;
             commit;    
@@ -154,11 +156,12 @@ PROCEDURE drop_group_member_on_demand (p_start_timestamp timestamp, p_end_timest
         -- bad prefix
       UPDATE ad_sync_owner.AD_SYNC_group_members
             SET
-                status = 37 -- invalid GROUP prefix
+                status = 47 -- invalid GROUP prefix
                 , PROCESS_TIMESTAMP = current_timestamp
                 , load_id=p_load_id
             WHERE
-                groupname not like ad_sync_owner.ad_sync_tools.get_param_value('GROUPNAME_PREFIX')||'%'
+                (groupname not like ad_sync_owner.ad_sync_tools.get_param_value('GROUPNAME_PREFIX')||'%'
+                or member  not like ad_sync_owner.ad_sync_tools.get_param_value('USERNAME_PREFIX')||'%' )
                 and status = 1
                 and CREATED_TIMESTAMP between p_start_timestamp and p_end_timestamp;
             v_number_of_existing := SQL%ROWCOUNT;
@@ -177,7 +180,7 @@ PROCEDURE drop_group_member_on_demand (p_start_timestamp timestamp, p_end_timest
                             SQLERRM);
         RAISE;
     end mark_existing_group_members;
-*/
+
     PROCEDURE add_group_members (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number) IS
         v_stmt VARCHAR2(4000);
         --v_file_name varchar2(100);
