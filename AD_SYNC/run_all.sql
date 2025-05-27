@@ -2,8 +2,8 @@
 set echo on 
 
 /**** values used as initial values for table ad_sync_owner.AD_SYNC_PARAMETERS */
-DEFINE username_prefix = AD_TEST
-DEFINE groupname_prefix = AD_TEST
+DEFINE username_prefix = PL
+DEFINE groupname_prefix = IFCKOLLDB
 DEFINE user_pass_directory_location = '/oracle/ADimp'
 DEFINE user_pass_directory_name = AD_SYNC_PASSWORDS
 
@@ -52,9 +52,11 @@ DEFINE ad_sync_interface_tablespace = ad_sync
 @packages/ad_sync_owner.ad_sync_process_users.sql
 @packages/ad_sync_owner.ad_sync_process_groups.sql
 @packages/ad_sync_owner.ad_sync_process_group_members.sql
-@packages/ad_sync_process_group_privileges.sql
+@packages/ad_sync_owner.ad_sync_process_group_privileges.sql
 
 @jobs/AD_SYNC_PROCESS_LOAD.sql
+@jobs/AD_SYNC_REFRESH_ROLES.sql
+
 
 @scripts/compile_all.sql
 @scripts/invalid_objects_check.sql
