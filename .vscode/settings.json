@@ -8,5 +8,6 @@
     "sqldeveloper.database.nls.timestampTZ Format": "DD/MM/RR HH24:MI:SSXFF TZR",
     "sqldeveloper.format.alignment": {
         "assignmentOperator": true
-    }
+    },
+    "powershell.buttons.showPanelMovementButtons": true
 }
