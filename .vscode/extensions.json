@@ -10,9 +10,9 @@
         "github.copilot-chat",
         "eamodio.gitlens",
         "vscode-icons-team.vscode-icons",
-        "oracle.oracledevtools",
         "github.vscode-pull-request-github",
         "github.remotehub",
-        "github.copilot-workspace"
+        "repreng.csv",
+        "cmoog.sqlnotebook"
     ]
 }
