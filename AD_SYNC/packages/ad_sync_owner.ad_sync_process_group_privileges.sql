@@ -17,7 +17,7 @@ CREATE OR REPLACE PACKAGE AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUP_PRIVILEGES
   );
 
   PROCEDURE CLEAN_ALL_GROUPS (
-     P_PROCESS_RUN NUMBER
+    P_PROCESS_RUN NUMBER
   );
 
   PROCEDURE GRANT_PRIVILEGES_TO_GROUPS (
@@ -67,7 +67,8 @@ CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUP_PRIVILEGES AS
       FROM
         DBA_ROLES
       WHERE
-        ROLE LIKE AD_SYNC_OWNER.AD_SYNC_TOOLS.GET_PARAM_VALUE('GROUPNAME_PREFIX')||'%'
+        ROLE LIKE AD_SYNC_OWNER.AD_SYNC_TOOLS.GET_PARAM_VALUE('GROUPNAME_PREFIX')
+                                              ||'%'
     ) LOOP
       CLEAN_GROUP(I.GROUPNAME, P_PROCESS_RUN);
     END LOOP;
@@ -82,7 +83,8 @@ CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUP_PRIVILEGES AS
   ) IS
   BEGIN
     AD_SYNC_LOG.WRITE_INFO( $$PLSQL_UNIT
-                            || '->clean_group started: ' ||P_GROUP, SQLCODE, SQLERRM, P_PROCESS_RUN );
+                            || '->clean_group started: '
+                            ||P_GROUP, SQLCODE, SQLERRM, P_PROCESS_RUN );
  
     --clean roles granted to role
     FOR I IN (
@@ -95,7 +97,8 @@ CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUP_PRIVILEGES AS
         ROLE_ROLE_PRIVS
       WHERE
         ROLE = P_GROUP
-        AND ROLE LIKE AD_SYNC_OWNER.AD_SYNC_TOOLS.GET_PARAM_VALUE('GROUPNAME_PREFIX')||'%'
+        AND ROLE LIKE AD_SYNC_OWNER.AD_SYNC_TOOLS.GET_PARAM_VALUE('GROUPNAME_PREFIX')
+                                                  ||'%'
     ) LOOP
       BEGIN
  
@@ -120,7 +123,8 @@ CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUP_PRIVILEGES AS
         ROLE_SYS_PRIVS
       WHERE
         ROLE = P_GROUP
-        AND ROLE LIKE AD_SYNC_OWNER.AD_SYNC_TOOLS.GET_PARAM_VALUE('GROUPNAME_PREFIX')||'%'
+        AND ROLE LIKE AD_SYNC_OWNER.AD_SYNC_TOOLS.GET_PARAM_VALUE('GROUPNAME_PREFIX')
+                                                  ||'%'
     ) LOOP
       BEGIN
  
@@ -149,7 +153,8 @@ CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUP_PRIVILEGES AS
         ROLE_TAB_PRIVS
       WHERE
         ROLE = P_GROUP
-        AND ROLE LIKE AD_SYNC_OWNER.AD_SYNC_TOOLS.GET_PARAM_VALUE('GROUPNAME_PREFIX')||'%'
+        AND ROLE LIKE AD_SYNC_OWNER.AD_SYNC_TOOLS.GET_PARAM_VALUE('GROUPNAME_PREFIX')
+                                                  ||'%'
     ) LOOP
       BEGIN
  
@@ -210,6 +215,7 @@ CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUP_PRIVILEGES AS
   BEGIN
     AD_SYNC_LOG.WRITE_INFO( $$PLSQL_UNIT
                             || '->add_object_privileges started', SQLCODE, SQLERRM, P_PROCESS_RUN );
+ /* whole schema privileges */
     FOR J IN (
       SELECT
         *
@@ -218,6 +224,8 @@ CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUP_PRIVILEGES AS
       WHERE
         SCHEMA <> '*'
         AND OBJECT_NAME = '*'
+        AND GROUPNAME LIKE AD_SYNC_OWNER.AD_SYNC_TOOLS.GET_PARAM_VALUE('GROUPNAME_PREFIX')
+                                                  ||'%'
     ) LOOP
       FOR I IN (
         SELECT
@@ -233,7 +241,7 @@ CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUP_PRIVILEGES AS
           DBA_OBJECTS
         WHERE
           OWNER = J.SCHEMA
-          AND OBJECT_TYPE IN ( 'TABLE', 'VIEW', 'MATERIALIZED VIEW' )
+          AND OBJECT_TYPE IN ( 'TABLE', 'VIEW', 'MATERIALIZED VIEW', 'SEQUENCE' )
         ORDER BY
           OBJECT_TYPE
         , OWNER
@@ -249,6 +257,37 @@ CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUP_PRIVILEGES AS
                                      || '->add_object_privileges', SQLCODE, SQLERRM, P_PROCESS_RUN );
         END;
       END LOOP;
+    END LOOP;
+ 
+ 
+ /* given object  privileges */
+    FOR J IN (
+      SELECT
+        'grant '
+        || PERMISSION
+        || ' on "'
+        || SCHEMA
+        || '"."'
+        || OBJECT_NAME
+        || '" to '
+        || GROUPNAME AS STMT
+      FROM
+        AD_SYNC_OWNER.AD_SYNC_GROUP_PERMISSION
+      WHERE
+        SCHEMA <> '*'
+        AND OBJECT_NAME <> '*'
+        AND GROUPNAME LIKE AD_SYNC_OWNER.AD_SYNC_TOOLS.GET_PARAM_VALUE('GROUPNAME_PREFIX')
+                                                  ||'%'
+    ) LOOP
+      BEGIN
+ 
+        --DBMS_OUTPUT.PUT_LINE(I.STMT);
+        EXECUTE IMMEDIATE J.STMT;
+      EXCEPTION
+        WHEN OTHERS THEN
+          AD_SYNC_LOG.WRITE_ERROR( $$PLSQL_UNIT
+                                   || '->add_object_privileges', SQLCODE, SQLERRM, P_PROCESS_RUN );
+      END;
     END LOOP;
 
     AD_SYNC_LOG.WRITE_INFO( $$PLSQL_UNIT
