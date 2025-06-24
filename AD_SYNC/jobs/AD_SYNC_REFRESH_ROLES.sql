@@ -1,4 +1,11 @@
 BEGIN
+    DBMS_SCHEDULER.DROP_JOB(job_name => '"AD_SYNC_OWNER"."AD_SYNC_REFRESH_ROLES"',
+                                defer => false,
+                                force => false);
+END;
+/
+
+BEGIN
   DBMS_SCHEDULER.CREATE_JOB(
     JOB_NAME            => '"AD_SYNC_OWNER"."AD_SYNC_REFRESH_ROLES"'
    ,JOB_TYPE            => 'PLSQL_BLOCK'
