@@ -1,6 +1,8 @@
 set serveroutput on
 set echo on 
 
+@sequences/ad_sync_owner_sequences.sql
+
 @views/ad_sync_owner.AD_SYNC_MANAGED_USERS.sql
 @views/ad_sync_owner.AD_SYNC_MANAGED_GROUPS.sql
 @views/ad_sync_owner.AD_SYNC_MANAGED_GROUP_MEMBERS.sql
@@ -13,6 +15,8 @@ set echo on
 @packages/ad_sync_owner.ad_sync_process_groups.sql
 @packages/ad_sync_owner.ad_sync_process_group_members.sql
 @packages/ad_sync_owner.ad_sync_process_group_privileges.sql
+@packages/ad_sync_owner.ad_sync_process_group_tablespace_quotas.sql
+
 
 @jobs/AD_SYNC_PROCESS_LOAD.sql
 @jobs/AD_SYNC_REFRESH_ROLES.sql

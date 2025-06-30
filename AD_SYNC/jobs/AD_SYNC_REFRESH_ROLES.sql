@@ -15,6 +15,7 @@ begin
 ad_sync_owner.AD_SYNC_PROCESS_GROUP_PRIVILEGES.clean_all_groups(v_process_run);
 ad_sync_owner.AD_SYNC_PROCESS_GROUP_PRIVILEGES.ADD_SYSTEM_PRIVILEGES_AND_ROLES(v_process_run);
 ad_sync_owner.AD_SYNC_PROCESS_GROUP_PRIVILEGES.ADD_OBJECT_PRIVILEGES(v_process_run);
+ad_sync_owner.ad_sync_process_group_tablespace_quotas.ADD_GROUP_MEMBERS_TABLESPACE_QUOTAS(v_process_run);
 end;'
    ,NUMBER_OF_ARGUMENTS => 0
    ,START_DATE          => NULL

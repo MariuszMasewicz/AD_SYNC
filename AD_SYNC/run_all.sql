@@ -40,6 +40,7 @@ DEFINE ad_sync_interface_tablespace = ad_sync
 @tables/ad_sync_owner.AD_SYNC_LOG_TABLE_TYPE.sql
 @tables/ad_sync_owner.AD_SYNC_LOG_TABLE.sql
 @tables/ad_sync_owner.AD_SYNC_GROUP_PERMISSION.sql
+@tables/ad_sync_owner.AD_SYNC_GROUP_TABLESPACE_QUOTAS.sql
 
 @views/ad_sync_owner.AD_SYNC_MANAGED_USERS.sql
 @views/ad_sync_owner.AD_SYNC_MANAGED_GROUPS.sql
@@ -53,6 +54,7 @@ DEFINE ad_sync_interface_tablespace = ad_sync
 @packages/ad_sync_owner.ad_sync_process_groups.sql
 @packages/ad_sync_owner.ad_sync_process_group_members.sql
 @packages/ad_sync_owner.ad_sync_process_group_privileges.sql
+@packages/ad_sync_owner.ad_sync_process_group_tablespace_quotas.sql
 
 @jobs/AD_SYNC_PROCESS_LOAD.sql
 @jobs/AD_SYNC_REFRESH_ROLES.sql
