@@ -30,22 +30,28 @@ prompt CREATE OR REPLACE PACKAGE BODY ad_sync_owner.ad_sync_load
 
 CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_LOAD AS
 
+  V_LOAD_ID NUMBER;
+
   PROCEDURE INIT_LOAD (
     P_LOAD_TYPE CHAR
   ) IS
   BEGIN
+    V_LOAD_ID := AD_SYNC_OWNER.AD_SYNC_LOAD_SEQ.NEXTVAL;
     INSERT INTO AD_SYNC_OWNER.AD_SYNC_HISTORY (
       SYNC_STATUS
       ,LOAD_ID
       ,LOAD_TYPE
     ) VALUES ( 2
-              ,AD_SYNC_OWNER.AD_SYNC_LOAD_SEQ.NEXTVAL
+              ,V_LOAD_ID
               ,P_LOAD_TYPE ); -- sync started
     COMMIT;
   EXCEPTION
     WHEN OTHERS THEN
       AD_SYNC_OWNER.AD_SYNC_LOG.WRITE_ERROR(
-        $$PLSQL_UNIT || '->init_load'
+        $$PLSQL_UNIT
+        || '->init_load'
+        || ':'
+        || V_LOAD_ID
        ,SQLCODE
        ,SQLERRM
       );
@@ -55,12 +61,19 @@ CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_LOAD AS
 
   PROCEDURE FINISH_LOAD IS
   BEGIN
-    INSERT INTO AD_SYNC_OWNER.AD_SYNC_HISTORY ( SYNC_STATUS ) VALUES ( 3 ); -- sync finished
+    INSERT INTO AD_SYNC_OWNER.AD_SYNC_HISTORY (
+      LOAD_ID
+      ,SYNC_STATUS
+    ) VALUES ( V_LOAD_ID
+              ,3 ); -- sync finished
     COMMIT;
   EXCEPTION
     WHEN OTHERS THEN
       AD_SYNC_OWNER.AD_SYNC_LOG.WRITE_ERROR(
-        $$PLSQL_UNIT || '->finish_load'
+        $$PLSQL_UNIT
+        || '->finish_load'
+        || ':'
+        || V_LOAD_ID
        ,SQLCODE
        ,SQLERRM
       );
@@ -78,9 +91,11 @@ CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_LOAD AS
       USERNAME
       ,PASSWORD
       ,REQUESTED_OPERATION
+      ,LOAD_ID
     ) VALUES ( UPPER(P_USERNAME)
               ,P_PASSWORD
-              ,UPPER(P_REQUESTED_OPERATION) );
+              ,UPPER(P_REQUESTED_OPERATION)
+              ,V_LOAD_ID );
     COMMIT;
   EXCEPTION
     WHEN OTHERS THEN
@@ -88,6 +103,8 @@ CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_LOAD AS
         $$PLSQL_UNIT
         || '->add_user_to_load: '
         || P_USERNAME
+        || ':'
+        || V_LOAD_ID
        ,SQLCODE
        ,SQLERRM
       );
@@ -100,7 +117,11 @@ CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_LOAD AS
    ,P_REQUESTED_OPERATION CHAR DEFAULT 'C'
   ) IS
   BEGIN
-    INSERT INTO AD_SYNC_OWNER.AD_SYNC_GROUPS ( GROUPNAME ) VALUES ( UPPER(P_GROUPNAME) );
+    INSERT INTO AD_SYNC_OWNER.AD_SYNC_GROUPS (
+      GROUPNAME
+      ,LOAD_ID
+    ) VALUES ( UPPER(P_GROUPNAME)
+              ,V_LOAD_ID );
     COMMIT;
   EXCEPTION
     WHEN OTHERS THEN
@@ -108,6 +129,8 @@ CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_LOAD AS
         $$PLSQL_UNIT
         || '->add_group_to_load: '
         || P_GROUPNAME
+        || ':'
+        || V_LOAD_ID
        ,SQLCODE
        ,SQLERRM
       );
@@ -121,7 +144,14 @@ CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_LOAD AS
    ,P_REQUESTED_OPERATION CHAR DEFAULT 'C'
   ) IS
   BEGIN
-    INSERT INTO ad_sync_owner.AD_SYNC_GROUP_MEMBERS (groupname,member, REQUESTED_OPERATION) VALUES (upper(p_groupname), upper(p_member), upper(p_REQUESTED_OPERATION));
+    INSERT INTO AD_SYNC_OWNER.AD_SYNC_GROUP_MEMBERS (
+      GROUPNAME
+      ,MEMBER
+      ,REQUESTED_OPERATION.LOAD_ID
+    ) VALUES ( UPPER(P_GROUPNAME)
+              ,UPPER(P_MEMBER)
+              ,UPPER(P_REQUESTED_OPERATION)
+              ,V_LOAD_ID );
     COMMIT;
   EXCEPTION
     WHEN OTHERS THEN
@@ -131,6 +161,8 @@ CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_LOAD AS
         || P_GROUPNAME
         || ':'
         || P_MEMBER
+        || ':'
+        || V_LOAD_ID
        ,SQLCODE
        ,SQLERRM
       );
