@@ -128,13 +128,26 @@ CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUP_MEMBERS AS
          ,SQLERRM
          ,P_PROCESS_RUN
         );
-        EXECUTE IMMEDIATE V_STMT;
-        UPDATE AD_SYNC_OWNER.AD_SYNC_GROUP_MEMBERS
-           SET STATUS = 42 -- GROUP_member dropped from group
-           ,PROCESS_TIMESTAMP = CURRENT_TIMESTAMP
-        ,LOAD_ID = P_LOAD_ID
-         WHERE ID = I.ID;
-
+        BEGIN
+          EXECUTE IMMEDIATE V_STMT;
+          UPDATE AD_SYNC_OWNER.AD_SYNC_GROUP_MEMBERS
+             SET STATUS = 42 -- GROUP_member dropped from group
+             ,PROCESS_TIMESTAMP = CURRENT_TIMESTAMP
+          ,LOAD_ID = P_LOAD_ID
+           WHERE ID = I.ID;
+        EXCEPTION
+          WHEN OTHERS THEN
+            AD_SYNC_LOG.WRITE_ERROR(
+              $$PLSQL_UNIT || '->drop_group_members_on_demand'
+             ,SQLCODE
+             ,SQLERRM
+            );
+            UPDATE AD_SYNC_OWNER.AD_SYNC_GROUP_MEMBERS
+               SET STATUS = 46 -- GROUP_member dropped from group
+               ,PROCESS_TIMESTAMP = CURRENT_TIMESTAMP
+            ,LOAD_ID = P_LOAD_ID
+             WHERE ID = I.ID;
+        END;
       END LOOP;
 
       COMMIT;

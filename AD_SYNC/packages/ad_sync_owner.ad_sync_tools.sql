@@ -61,9 +61,9 @@ CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_TOOLS IS
     DIGITS   CONSTANT VARCHAR2(10) := '0123456789';
     LOWER    CONSTANT VARCHAR2(26) := 'abcdefghijklmnopqrstuvwxyz';
     UPPER    CONSTANT VARCHAR2(26) := 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    SPECIAL  CONSTANT VARCHAR2(128) := '!"£$%^&*()-_=+{}[]<>,.\|/?;:''@#';
- 
-    --special  CONSTANT VARCHAR2(32) := '!$%^&*()-_=+{}[]<>,.\|/?;:#';
+    --SPECIAL  CONSTANT VARCHAR2(128) := '!"£$%^&*()-_=+{}[]<>,.\|/?;:''@#';
+    SPECIAL  CONSTANT VARCHAR2(128)   := '!$%^&*()-_=+{}[]<>,.\|/?:#';
+     --special  CONSTANT VARCHAR2(32) := '!$%^&*()-_=+{}[]<>,.\|/?;:#';
   BEGIN
     SELECT
       LISTAGG(LETTER
