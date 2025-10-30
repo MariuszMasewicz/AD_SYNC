@@ -3,8 +3,8 @@ set echo on
 
 /**** values used as initial values for table ad_sync_owner.AD_SYNC_PARAMETERS */
 DEFINE username_prefix = PL
-DEFINE groupname_prefix = IFCKOLLDB
-DEFINE user_pass_directory_location = '/oracle/ADimp'
+DEFINE groupname_prefix = KSIWARCCDB02__MCC_
+DEFINE user_pass_directory_location = '/oracle/ADimp/mcc'
 DEFINE user_pass_directory_name = AD_SYNC_PASSWORDS
 
 /**** values used as initial values for create users */
@@ -19,6 +19,7 @@ DEFINE ad_sync_interface_tablespace = ad_sync
 --@tablespace/ad_sync.sql
 @functions/sys.ad_sync_default_password_verify_function.sql
 @profiles/ad_sync_default_profile.sql
+@profiles/ad_sync_service_account.sql
 @users/ad_sync_owner.sql
 @users/ad_sync_owner_grants.sql
 @users/ad_sync_interface.sql
@@ -47,9 +48,9 @@ DEFINE ad_sync_interface_tablespace = ad_sync
 @views/ad_sync_owner.AD_SYNC_MANAGED_GROUP_MEMBERS.sql
 @views/ad_sync_owner.AD_SYNC_PROCESSING_STATUS_USERS.sql
 
-@packages/ad_sync_owner.ad_sync_load.sql
-@packages/ad_sync_owner.ad_sync_log.sql
 @packages/ad_sync_owner.ad_sync_tools.sql
+@packages/ad_sync_owner.ad_sync_log.sql
+@packages/ad_sync_owner.ad_sync_load.sql
 @packages/ad_sync_owner.ad_sync_process_users.sql
 @packages/ad_sync_owner.ad_sync_process_groups.sql
 @packages/ad_sync_owner.ad_sync_process_group_members.sql
