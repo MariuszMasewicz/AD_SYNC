@@ -2,9 +2,9 @@
 set echo on 
 
 /**** values used as initial values for table ad_sync_owner.AD_SYNC_PARAMETERS */
-DEFINE username_prefix = PL
-DEFINE groupname_prefix = KSIWARCCDB02__MCC_
-DEFINE user_pass_directory_location = '/oracle/ADimp/mcc'
+DEFINE username_prefix = UP
+DEFINE groupname_prefix = GP
+DEFINE user_pass_directory_location = '/oracle/ADimp/'
 DEFINE user_pass_directory_name = AD_SYNC_PASSWORDS
 
 /**** values used as initial values for create users */
