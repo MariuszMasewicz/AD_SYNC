@@ -1,5 +1,5 @@
     prompt ad_sync_interface_grants
-
+--version: 0.0.001
     GRANT CONNECT TO AD_SYNC_INTERFACE;
 
     GRANT EXECUTE ON AD_SYNC_OWNER.AD_SYNC_LOAD TO AD_SYNC_INTERFACE;

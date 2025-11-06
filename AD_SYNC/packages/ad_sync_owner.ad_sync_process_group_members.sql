@@ -1,6 +1,7 @@
 prompt CREATE OR REPLACE PACKAGE  ad_sync_owner.ad_sync_process_group_members
 
 CREATE OR REPLACE PACKAGE AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUP_MEMBERS AUTHID CURRENT_USER AS
+--version: 0.0.001
   PROCEDURE ADD_GROUP_MEMBERS (
     P_START_TIMESTAMP TIMESTAMP
    ,P_END_TIMESTAMP   TIMESTAMP
@@ -25,7 +26,7 @@ END AD_SYNC_PROCESS_GROUP_MEMBERS;
 
 prompt CREATE OR REPLACE PACKAGE BODY ad_sync_owner.ad_sync_process_group_members
 CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUP_MEMBERS AS
-
+--version: 0.0.001
 /*PROCEDURE drop_group_members_not_exist_in_load (p_start_timestamp timestamp, p_end_timestamp timestamp, p_process_run number, p_load_id number) as
         v_stmt VARCHAR2(4000);
     BEGIN
@@ -304,6 +305,8 @@ CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_PROCESS_GROUP_MEMBERS AS
            ,PROCESS_TIMESTAMP = CURRENT_TIMESTAMP
         ,LOAD_ID = P_LOAD_ID
          WHERE ID = I.ID;
+
+      execute immediate 'alter user '||i.member||' default role all'; 
 
       END LOOP;
 

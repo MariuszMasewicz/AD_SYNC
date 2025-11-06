@@ -1,4 +1,5 @@
 prompt ad_sync_interface 
+--version: 0.0.001
 DROP USER ad_sync_interface cascade;
 
 prompt CREATE USER ad_sync_interface

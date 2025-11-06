@@ -1,5 +1,5 @@
 prompt ad_sync_owner_grants
-
+--version: 0.0.001
 -- SYSTEM PRIVILEGES
 GRANT CONNECT TO AD_SYNC_OWNER;
 

@@ -1,3 +1,5 @@
+--version: 0.0.001
+
 prompt CREATE SEQUENCE ad_sync_owner.ad_sync_users_SEQ;
 
 CREATE SEQUENCE AD_SYNC_OWNER.AD_SYNC_USERS_SEQ;

@@ -1,5 +1,5 @@
 prompt ad_sync_owner
-
+--version: 0.0.001
 DROP USER AD_SYNC_OWNER CASCADE;
 
 prompt CREATE USER ad_sync_owner

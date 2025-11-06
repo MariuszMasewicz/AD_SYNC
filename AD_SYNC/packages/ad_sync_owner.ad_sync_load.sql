@@ -1,6 +1,7 @@
 prompt CREATE OR REPLACE PACKAGE ad_sync_owner.ad_sync_load
 
 CREATE OR REPLACE PACKAGE AD_SYNC_OWNER.AD_SYNC_LOAD AS
+--version: 0.0.001
   PROCEDURE INIT_LOAD (
     P_LOAD_TYPE CHAR
   );
@@ -29,7 +30,7 @@ END AD_SYNC_LOAD;
 prompt CREATE OR REPLACE PACKAGE BODY ad_sync_owner.ad_sync_load
 
 CREATE OR REPLACE PACKAGE BODY AD_SYNC_OWNER.AD_SYNC_LOAD AS
-
+--version: 0.0.001
   V_LOAD_ID NUMBER;
   v_start_timestamp timestamp;
   v_end_timestamp timestamp;
