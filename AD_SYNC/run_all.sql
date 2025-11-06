@@ -35,6 +35,7 @@ DEFINE ad_sync_interface_tablespace = ad_sync
 @tables/ad_sync_owner.AD_SYNC_HISTORY.sql
 @tables/ad_sync_owner.AD_SYNC_USERS_REQUEST_TYPES.sql
 @tables/ad_sync_owner.AD_SYNC_USERS.sql
+@tables/ad_sync_owner.AD_SYNC_USERS_FOR_SERVICES.sql
 @tables/ad_sync_owner.AD_SYNC_GROUPS.sql
 @tables/ad_sync_owner.AD_SYNC_GROUP_MEMBERS.sql
 @tables/ad_sync_owner.AD_SYNC_PARAMETERS.sql
